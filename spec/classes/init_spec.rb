@@ -132,7 +132,7 @@ describe 'nrpe' do
     end
   end
 
-  context 'with server_port set to a valid digit, but invalid port number' do
+  context 'with server_port set to a valid digit, but invalid port number (above 65535)' do
     let(:params) { { :server_port => '1000000' } }
     let(:facts) do
       { :osfamily          => 'RedHat',
@@ -144,6 +144,21 @@ describe 'nrpe' do
       expect {
         should include_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <1000000>./)
+    end
+  end
+
+  context 'with server_port set to a valid digit, but invalid port number (negative)' do
+    let(:params) { { :server_port => '-23' } }
+    let(:facts) do
+      { :osfamily          => 'RedHat',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it 'should fail' do
+      expect {
+        should include_class('nrpe')
+      }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <-23>./)
     end
   end
 
