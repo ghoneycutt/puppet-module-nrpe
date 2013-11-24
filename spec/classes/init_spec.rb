@@ -20,6 +20,16 @@ describe 'nrpe' do
     }
 
     it {
+      should contain_package('nagios_plugins_package').with({
+        'ensure'    => 'present',
+        'name'      => 'nagios-plugins',
+        'adminfile' => nil,
+        'source'    => nil,
+        'before'    => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
       should contain_file('nrpe_config').with({
         'ensure'  => 'file',
         'path'    => '/etc/nagios/nrpe.cfg',
@@ -46,6 +56,18 @@ describe 'nrpe' do
     it { should contain_file('nrpe_config').with_content(/^allow_weak_random_seed=0$/) }
     it { should contain_file('nrpe_config').with_content(/^include_dir=\/etc\/nrpe.d$/) }
     it { should_not contain_file('nrpe_config').with_content(/^command\[$/) }
+
+    it {
+      should contain_file('nrpe_config_dot_d').with({
+        'ensure'  => 'directory',
+        'path'    => '/etc/nrpe.d',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'Package[nrpe_package]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
 
     it {
       should contain_service('nrpe_service').with({
