@@ -47,8 +47,30 @@ class nrpe (
       $default_nrpe_group             = 'nrpe'
       $default_include_dir            = '/etc/nrpe.d'
     }
+    'Suse': {
+      $default_nrpe_package           = 'nrpe'
+      $default_nrpe_package_adminfile = undef
+      $default_nrpe_package_source    = undef
+      $default_nrpe_config            = '/etc/nrpe.conf'
+      $default_libexecdir             = '/opt/plugins'
+      $default_pid_file               = '/var/run/nrpe/nrpe.pid'
+      $default_nrpe_user              = 'nrpe'
+      $default_nrpe_group             = 'nrpe'
+      $default_include_dir            = '/etc/nrpe.d'
+    }
+    'Solaris': {
+      $default_nrpe_package           = 'op5-nrpe-nagioplugins'
+      $default_nrpe_package_adminfile = '/var/sadm/install/admin/puppet-admin'
+      $default_nrpe_package_source    = '/var/spool/pkg'
+      $default_nrpe_config            = '/etc/nrpe.cfg'
+      $default_libexecdir             = '/usr/local/nagios/libexec'
+      $default_pid_file               = '/var/run/nrpe/nrpe.pid'
+      $default_nrpe_user              = 'nrpe'
+      $default_nrpe_group             = 'nrpe'
+      $default_include_dir            = '/etc/nrpe.d'
+    }
     default: {
-      fail("nrpe supports osfamily RedHat. Detected osfamily is <${::osfamily}>")
+      fail("nrpe supports osfamilies RedHat, Suse and Solaris. Detected osfamily is <${::osfamily}>")
     }
   }
 
@@ -193,4 +215,5 @@ class nrpe (
     validate_hash($plugins)
     create_resources('nrpe::plugin',$plugins)
   }
+
 }
