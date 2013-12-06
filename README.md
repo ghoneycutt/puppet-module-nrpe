@@ -12,6 +12,7 @@ Manage NRPE
 This module is built for use with Puppet v3 and is tested on the following OS families.
 
 * EL 6
+* Suse 11
 
 ===
 
@@ -19,12 +20,41 @@ This module is built for use with Puppet v3 and is tested on the following OS fa
 
 ## Parameters
 
-
 nrpe_package
 ------------
 Name of package(s) for NRPE.
 
 - *Default*: based on OS platform.
+
+nrpe_package_adminfile
+----------------------
+Path to admin file for NRPE package.
+
+- *Default*: based on OS platform. (used on Solaris)
+
+nrpe_package_source
+-------------------
+Source to NRPE package.
+
+- *Default*: based on OS platform. (used on Solaris)
+
+nagios_plugins_package
+----------------------
+Name of package(s) for nagios-plugins.
+
+- *Default*: based on OS platform.
+
+nagios_plugins_package_adminfile
+--------------------------------
+Path to admin file for nagios-plugins package.
+
+- *Default*: based on OS platform. (used on Solaris)
+
+nagios_plugins_package_source
+-----------------------------
+Source to nagios-plugins package.
+
+- *Default*: based on OS platform. (used on Solaris)
 
 nrpe_config
 -----------

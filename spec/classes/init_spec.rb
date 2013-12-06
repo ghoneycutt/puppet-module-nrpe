@@ -1,6 +1,17 @@
 require 'spec_helper'
 describe 'nrpe' do
 
+
+  context 'with default options on unsupported osfamily' do
+    let(:facts) { { :osfamily => 'Unsupported' } }
+
+    it 'should fail' do
+      expect {
+        should include_class('nrpe')
+      }.to raise_error(Puppet::Error,/nrpe supports osfamilies RedHat and Suse. Detected osfamily is <Unsupported>./)
+    end
+  end
+
   context 'with default options on EL 6' do
     let(:facts) do
       { :osfamily          => 'RedHat',
@@ -16,6 +27,16 @@ describe 'nrpe' do
         'name'      => 'nrpe',
         'adminfile' => nil,
         'source'    => nil,
+      })
+    }
+
+    it {
+      should contain_package('nagios_plugins_package').with({
+        'ensure'    => 'present',
+        'name'      => 'nagios-plugins',
+        'adminfile' => nil,
+        'source'    => nil,
+        'before'    => 'Service[nrpe_service]',
       })
     }
 
@@ -36,6 +57,74 @@ describe 'nrpe' do
     it { should_not contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
     it { should contain_file('nrpe_config').with_content(/^nrpe_user=nrpe$/) }
     it { should contain_file('nrpe_config').with_content(/^nrpe_group=nrpe$/) }
+    it { should contain_file('nrpe_config').with_content(/^allowed_hosts=127.0.0.1$/) }
+    it { should contain_file('nrpe_config').with_content(/^dont_blame_nrpe=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^allow_bash_command_substitution=0$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^command_prefix=\/usr\/bin\/sudo$/) }
+    it { should contain_file('nrpe_config').with_content(/^debug=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^command_timeout=60$/) }
+    it { should contain_file('nrpe_config').with_content(/^connection_timeout=300$/) }
+    it { should contain_file('nrpe_config').with_content(/^allow_weak_random_seed=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^include_dir=\/etc\/nrpe.d$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^command\[$/) }
+
+    it {
+      should contain_file('nrpe_config_dot_d').with({
+        'ensure'  => 'directory',
+        'path'    => '/etc/nrpe.d',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'Package[nrpe_package]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_service('nrpe_service').with({
+        'ensure'    => 'running',
+        'name'      => 'nrpe',
+        'enable'    => true,
+        'subscribe' => 'File[nrpe_config]',
+      })
+    }
+  end
+
+  context 'with default options on Suse 11' do
+    let(:facts) do
+      { :osfamily          => 'Suse',
+        :lsbmajdistrelease => '11',
+      }
+    end
+
+    it { should include_class('nrpe') }
+
+    it {
+      should contain_package('nrpe_package').with({
+        'ensure'    => 'present',
+        'name'      => 'nagios-nrpe',
+        'adminfile' => nil,
+        'source'    => nil,
+      })
+    }
+
+    it {
+      should contain_file('nrpe_config').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nagios/nrpe.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'Package[nrpe_package]',
+      })
+    }
+
+    it { should contain_file('nrpe_config').with_content(/^log_facility=daemon$/) }
+    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nrpe\/nrpe.pid$/) }
+    it { should contain_file('nrpe_config').with_content(/^server_port=5666$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
+    it { should contain_file('nrpe_config').with_content(/^nrpe_user=nagios$/) }
+    it { should contain_file('nrpe_config').with_content(/^nrpe_group=nagios$/) }
     it { should contain_file('nrpe_config').with_content(/^allowed_hosts=127.0.0.1$/) }
     it { should contain_file('nrpe_config').with_content(/^dont_blame_nrpe=0$/) }
     it { should contain_file('nrpe_config').with_content(/^allow_bash_command_substitution=0$/) }
@@ -382,7 +471,64 @@ describe 'nrpe' do
     end
   end
 
-  context 'with plugins specified as a hash on RedHat 6' do
+  context 'with plugins specified as a hash on 32 bit EL 6' do
+    let(:params) {
+      {
+        :plugins => {
+          'check_root_partition' => {
+            'plugin'     => 'check_disk',
+            'libexecdir' => '/usr/lib/nagios/plugins',
+            'args'       => '-w 20% -c 10% -p /',
+          },
+          'check_load' => {
+            'args' => '-w 10,8,8 -c 12,10,9',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :architecture      => 'i386',
+        :osfamily          => 'RedHat',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it { should include_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nrpe.d/check_root_partition.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition') \
+        .with_content(/^command\[check_root_partition\]=\/usr\/lib\/nagios\/plugins\/check_disk -w 20% -c 10% -p \/$/)
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nrpe.d/check_load.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load') \
+        .with_content(/^command\[check_load\]=\/usr\/lib\/nagios\/plugins\/check_load -w 10,8,8 -c 12,10,9$/)
+    }
+  end
+
+  context 'with plugins specified as a hash on 64 bit EL 6' do
     let(:params) {
       {
         :plugins => {
@@ -398,7 +544,8 @@ describe 'nrpe' do
       }
     }
     let(:facts) do
-      { :osfamily          => 'RedHat',
+      { :architecture      => 'x86_64',
+        :osfamily          => 'RedHat',
         :lsbmajdistrelease => '6',
       }
     end
@@ -438,7 +585,7 @@ describe 'nrpe' do
     }
   end
 
-  context 'with plugins specified as a hash on RedHat 6 i386' do
+  context 'with plugins specified as a hash on Suse 11' do
     let(:params) {
       {
         :plugins => {
@@ -454,9 +601,8 @@ describe 'nrpe' do
       }
     }
     let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-        :architecture      => 'i386',
+      { :osfamily          => 'Suse',
+        :lsbmajdistrelease => '11',
       }
     end
 
