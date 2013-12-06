@@ -12,6 +12,7 @@ Manage NRPE
 This module is built for use with Puppet v3 and is tested on the following OS families.
 
 * EL 6
+* Suse 11
 
 ===
 
