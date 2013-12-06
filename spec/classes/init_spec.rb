@@ -1,6 +1,17 @@
 require 'spec_helper'
 describe 'nrpe' do
 
+
+  context 'with default options on unsupported osfamily' do
+    let(:facts) { { :osfamily => 'Unsupported' } }
+
+    it 'should fail' do
+      expect {
+        should include_class('nrpe')
+      }.to raise_error(Puppet::Error,/nrpe supports osfamilies RedHat and Suse. Detected osfamily is <Unsupported>./)
+    end
+  end
+
   context 'with default options on EL 6' do
     let(:facts) do
       { :osfamily          => 'RedHat',

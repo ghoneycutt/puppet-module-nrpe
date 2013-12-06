@@ -65,7 +65,7 @@ class nrpe (
       $default_include_dir            = '/etc/nrpe.d'
     }
     default: {
-      fail("nrpe only supports osfamily RedHat and Suse. Detected osfamily is <${::osfamily}>")
+      fail("nrpe supports osfamilies RedHat and Suse. Detected osfamily is <${::osfamily}>.")
     }
   }
 
