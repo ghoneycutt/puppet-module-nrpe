@@ -471,7 +471,64 @@ describe 'nrpe' do
     end
   end
 
-  context 'with plugins specified as a hash' do
+  context 'with plugins specified as a hash on 32 bit EL 6' do
+    let(:params) {
+      {
+        :plugins => {
+          'check_root_partition' => {
+            'plugin'     => 'check_disk',
+            'libexecdir' => '/usr/lib/nagios/plugins',
+            'args'       => '-w 20% -c 10% -p /',
+          },
+          'check_load' => {
+            'args' => '-w 10,8,8 -c 12,10,9',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :architecture      => 'i386',
+        :osfamily          => 'RedHat',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it { should include_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nrpe.d/check_root_partition.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition') \
+        .with_content(/^command\[check_root_partition\]=\/usr\/lib\/nagios\/plugins\/check_disk -w 20% -c 10% -p \/$/)
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nrpe.d/check_load.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load') \
+        .with_content(/^command\[check_load\]=\/usr\/lib\/nagios\/plugins\/check_load -w 10,8,8 -c 12,10,9$/)
+    }
+  end
+
+  context 'with plugins specified as a hash on 64 bit EL 6' do
     let(:params) {
       {
         :plugins => {
@@ -487,7 +544,8 @@ describe 'nrpe' do
       }
     }
     let(:facts) do
-      { :osfamily          => 'RedHat',
+      { :architecture      => 'x86_64',
+        :osfamily          => 'RedHat',
         :lsbmajdistrelease => '6',
       }
     end
@@ -533,7 +591,7 @@ describe 'nrpe' do
         :plugins => {
           'check_root_partition' => {
             'plugin'     => 'check_disk',
-            'libexecdir' => '/usr/lib64/nagios/plugins',
+            'libexecdir' => '/usr/lib/nagios/plugins',
             'args'       => '-w 20% -c 10% -p /',
           },
           'check_load' => {
@@ -563,7 +621,7 @@ describe 'nrpe' do
 
     it {
       should contain_file('nrpe_plugin_check_root_partition') \
-        .with_content(/^command\[check_root_partition\]=\/usr\/lib64\/nagios\/plugins\/check_disk -w 20% -c 10% -p \/$/)
+        .with_content(/^command\[check_root_partition\]=\/usr\/lib\/nagios\/plugins\/check_disk -w 20% -c 10% -p \/$/)
     }
 
     it {
