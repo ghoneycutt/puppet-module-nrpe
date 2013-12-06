@@ -47,8 +47,19 @@ class nrpe (
       $default_nrpe_group             = 'nrpe'
       $default_include_dir            = '/etc/nrpe.d'
     }
+    'Suse': {
+      $default_nrpe_package           = 'nagios-nrpe'
+      $default_nrpe_package_adminfile = undef
+      $default_nrpe_package_source    = undef
+      $default_nrpe_config            = '/etc/nagios/nrpe.cfg'
+      $default_libexecdir             = '/usr/lib/nagios/plugins'
+      $default_pid_file               = '/var/run/nrpe/nrpe.pid'
+      $default_nrpe_user              = 'nagios'
+      $default_nrpe_group             = 'nagios'
+      $default_include_dir            = '/etc/nrpe.d'
+    }
     default: {
-      fail("nrpe supports osfamily RedHat. Detected osfamily is <${::osfamily}>")
+      fail("nrpe only supports osfamily RedHat and Suse. Detected osfamily is <${::osfamily}>")
     }
   }
 
