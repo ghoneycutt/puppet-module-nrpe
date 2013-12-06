@@ -3,49 +3,55 @@
 # Module to manage nrpe
 #
 class nrpe (
-  $nrpe_package                    = 'USE_DEFAULTS',
-  $nrpe_package_adminfile          = 'USE_DEFAULTS',
-  $nrpe_package_source             = 'USE_DEFAULTS',
-  $nrpe_config                     = 'USE_DEFAULTS',
-  $nrpe_config_owner               = 'root',
-  $nrpe_config_group               = 'root',
-  $nrpe_config_mode                = '0644',
-  $libexecdir                      = 'USE_DEFAULTS',
-  $log_facility                    = 'daemon',
-  $pid_file                        = 'USE_DEFAULTS',
-  $server_port                     = '5666',
-  $server_address_enable           = false,
-  $server_address                  = '127.0.0.1',
-  $nrpe_user                       = 'USE_DEFAULTS',
-  $nrpe_group                      = 'USE_DEFAULTS',
-  $allowed_hosts                   = ['127.0.0.1'],
-  $dont_blame_nrpe                 = '0',
-  $allow_bash_command_substitution = '0',
-  $command_prefix_enable           = false,
-  $command_prefix                  = '/usr/bin/sudo',
-  $debug                           = '0',
-  $command_timeout                 = '60',
-  $connection_timeout              = '300',
-  $allow_weak_random_seed          = '0',
-  $include_dir                     = 'USE_DEFAULTS',
-  $service_ensure                  = 'running',
-  $service_name                    = 'nrpe',
-  $service_enable                  = true,
-  $plugins                         = undef,
+  $nrpe_package                     = 'USE_DEFAULTS',
+  $nrpe_package_adminfile           = 'USE_DEFAULTS',
+  $nrpe_package_source              = 'USE_DEFAULTS',
+  $nagios_plugins_package           = 'USE_DEFAULTS',
+  $nagios_plugins_package_adminfile = 'USE_DEFAULTS',
+  $nagios_plugins_package_source    = 'USE_DEFAULTS',
+  $nrpe_config                      = 'USE_DEFAULTS',
+  $nrpe_config_owner                = 'root',
+  $nrpe_config_group                = 'root',
+  $nrpe_config_mode                 = '0644',
+  $libexecdir                       = 'USE_DEFAULTS',
+  $log_facility                     = 'daemon',
+  $pid_file                         = 'USE_DEFAULTS',
+  $server_port                      = '5666',
+  $server_address_enable            = false,
+  $server_address                   = '127.0.0.1',
+  $nrpe_user                        = 'USE_DEFAULTS',
+  $nrpe_group                       = 'USE_DEFAULTS',
+  $allowed_hosts                    = ['127.0.0.1'],
+  $dont_blame_nrpe                  = '0',
+  $allow_bash_command_substitution  = '0',
+  $command_prefix_enable            = false,
+  $command_prefix                   = '/usr/bin/sudo',
+  $debug                            = '0',
+  $command_timeout                  = '60',
+  $connection_timeout               = '300',
+  $allow_weak_random_seed           = '0',
+  $include_dir                      = 'USE_DEFAULTS',
+  $service_ensure                   = 'running',
+  $service_name                     = 'nrpe',
+  $service_enable                   = true,
+  $plugins                          = undef,
 ) {
 
   # OS platform defaults
   case $::osfamily {
     'RedHat': {
-      $default_nrpe_package           = 'nrpe'
-      $default_nrpe_package_adminfile = undef
-      $default_nrpe_package_source    = undef
-      $default_nrpe_config            = '/etc/nagios/nrpe.cfg'
-      $default_libexecdir             = '/usr/lib64/nagios/plugins'
-      $default_pid_file               = '/var/run/nrpe/nrpe.pid'
-      $default_nrpe_user              = 'nrpe'
-      $default_nrpe_group             = 'nrpe'
-      $default_include_dir            = '/etc/nrpe.d'
+      $default_nrpe_package                     = 'nrpe'
+      $default_nrpe_package_adminfile           = undef
+      $default_nrpe_package_source              = undef
+      $default_nagios_plugins_package           = 'nagios-plugins'
+      $default_nagios_plugins_package_adminfile = undef
+      $default_nagios_plugins_package_source    = undef
+      $default_nrpe_config                      = '/etc/nagios/nrpe.cfg'
+      $default_libexecdir                       = '/usr/lib64/nagios/plugins'
+      $default_pid_file                         = '/var/run/nrpe/nrpe.pid'
+      $default_nrpe_user                        = 'nrpe'
+      $default_nrpe_group                       = 'nrpe'
+      $default_include_dir                      = '/etc/nrpe.d'
     }
     default: {
       fail("nrpe supports osfamily RedHat. Detected osfamily is <${::osfamily}>")
@@ -69,6 +75,24 @@ class nrpe (
     $nrpe_package_source_real = $default_nrpe_package_source
   } else {
     $nrpe_package_source_real = $nrpe_package_source
+  }
+
+  if $nagios_plugins_package == 'USE_DEFAULTS' {
+    $nagios_plugins_package_real = $default_nagios_plugins_package
+  } else {
+    $nagios_plugins_package_real = $nagios_plugins_package
+  }
+
+  if $nagios_plugins_package_adminfile == 'USE_DEFAULTS' {
+    $nagios_plugins_package_adminfile_real = $default_nagios_plugins_package_adminfile
+  } else {
+    $nagios_plugins_package_adminfile_real = $nagios_plugins_package_adminfile
+  }
+
+  if $nagios_plugins_package_source == 'USE_DEFAULTS' {
+    $nagios_plugins_package_source_real = $default_nagios_plugins_package_source
+  } else {
+    $nagios_plugins_package_source_real = $nagios_plugins_package_source
   }
 
   if $nrpe_config == 'USE_DEFAULTS' {
@@ -160,6 +184,14 @@ class nrpe (
     name      => $nrpe_package_real,
     adminfile => $nrpe_package_adminfile_real,
     source    => $nrpe_package_source_real,
+  }
+
+  package { 'nagios_plugins_package':
+    ensure    => 'present',
+    name      => $nagios_plugins_package_real,
+    adminfile => $nagios_plugins_package_adminfile_real,
+    source    => $nagios_plugins_package_source_real,
+    before    => Service['nrpe_service'],
   }
 
   file { 'nrpe_config':
