@@ -18,6 +18,8 @@ describe 'nrpe' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_class('nrpe') }
 
     it {
@@ -95,6 +97,8 @@ describe 'nrpe' do
         :lsbmajdistrelease => '11',
       }
     end
+
+    it { should compile.with_all_deps }
 
     it { should contain_class('nrpe') }
 
@@ -258,6 +262,8 @@ describe 'nrpe' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
   end
 
@@ -269,6 +275,8 @@ describe 'nrpe' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
   end
 
@@ -279,6 +287,8 @@ describe 'nrpe' do
         :lsbmajdistrelease => '6',
       }
     end
+
+    it { should compile.with_all_deps }
 
     it { should contain_file('nrpe_config').with_content(/^allowed_hosts=127.0.0.1,poller.example.com$/) }
   end
@@ -336,6 +346,8 @@ describe 'nrpe' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_file('nrpe_config').with_content(/^command_prefix=\/usr\/bin\/sudo$/) }
   end
 
@@ -346,6 +358,8 @@ describe 'nrpe' do
         :lsbmajdistrelease => '6',
       }
     end
+
+    it { should compile.with_all_deps }
 
     it { should contain_file('nrpe_config').with_content(/^command_prefix=\/usr\/bin\/sudo$/) }
   end
@@ -492,6 +506,8 @@ describe 'nrpe' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_class('nrpe') }
 
     it {
@@ -549,6 +565,8 @@ describe 'nrpe' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_class('nrpe') }
 
     it {
@@ -604,6 +622,8 @@ describe 'nrpe' do
         :lsbmajdistrelease => '11',
       }
     end
+
+    it { should compile.with_all_deps }
 
     it { should contain_class('nrpe') }
 

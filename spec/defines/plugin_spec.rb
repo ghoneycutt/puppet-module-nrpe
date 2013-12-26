@@ -15,6 +15,8 @@ describe 'nrpe::plugin' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_class('nrpe') }
 
     it {
@@ -41,6 +43,8 @@ describe 'nrpe::plugin' do
         :lsbmajdistrelease => '6',
       }
     end
+
+    it { should compile.with_all_deps }
 
     it { should contain_class('nrpe') }
 
