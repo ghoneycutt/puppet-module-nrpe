@@ -15,7 +15,7 @@ describe 'nrpe::plugin' do
       }
     end
 
-    it { should include_class('nrpe') }
+    it { should contain_class('nrpe') }
 
     it {
       should contain_file('nrpe_plugin_check_root_partition').with({
@@ -43,7 +43,7 @@ describe 'nrpe::plugin' do
       }
     end
 
-    it { should include_class('nrpe') }
+    it { should contain_class('nrpe') }
 
     it {
       should contain_file('nrpe_plugin_check_load').with({
@@ -78,7 +78,7 @@ describe 'nrpe::plugin' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe::plugin')
+        should contain_class('nrpe::plugin')
       }.to raise_error(Puppet::Error)
     end
   end
