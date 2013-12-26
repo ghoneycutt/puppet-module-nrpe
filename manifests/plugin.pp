@@ -6,7 +6,7 @@
 # command[check_hda1]=@libexecdir@/check_disk -w 20% -c 10% -p /dev/hda1
 # command[$name]=$libexecdir/$plugin $args
 define nrpe::plugin (
-  $args,
+  $args       = 'UNSET',
   $libexecdir = 'USE_DEFAULTS',
   $plugin     = 'USE_DEFAULTS',
 ) {

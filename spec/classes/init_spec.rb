@@ -1,7 +1,6 @@
 require 'spec_helper'
 describe 'nrpe' do
 
-
   context 'with default options on unsupported osfamily' do
     let(:facts) { { :osfamily => 'Unsupported' } }
 
