@@ -216,7 +216,7 @@ Hash of plugins to be passed to nrpe::plugin with create_resources().
 
 # Define `nrpe::plugin`
 
-Creates a fragment in the sudoers.d directory with `$name.cfg`. Each matches the following layout.
+Creates a fragment in the sudoers.d directory with `$name.cfg`. Each matches the following layout, where `$args` are optional.
 
 <pre>
 command[$name]=${libexecdir}/${plugin} $args
@@ -234,6 +234,7 @@ nrpe::plugins:
     args: '-w 20% -c 10% -p /'
   check_load:
     args: '-w 10,8,8 -c 12,10,9'
+  check_myapp:
 </pre>
 
 ## Parameters
@@ -242,7 +243,7 @@ args
 ----
 Arguments to pass to the plugin.
 
-- *Required*
+- *Defaul*: undef
 
 libexecdir
 ----------

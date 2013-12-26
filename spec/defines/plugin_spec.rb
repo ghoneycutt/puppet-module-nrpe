@@ -15,7 +15,9 @@ describe 'nrpe::plugin' do
       }
     end
 
-    it { should include_class('nrpe') }
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
 
     it {
       should contain_file('nrpe_plugin_check_root_partition').with({
@@ -34,16 +36,17 @@ describe 'nrpe::plugin' do
     }
   end
 
-  context 'should create plugin file with only args param specified' do
+  context 'should create plugin file with no args param specified' do
     let(:title) { 'check_load' }
-    let(:params) { { :args => '-w 10,8,8 -c 12,10,9' } }
     let(:facts) do
       { :osfamily          => 'RedHat',
         :lsbmajdistrelease => '6',
       }
     end
 
-    it { should include_class('nrpe') }
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
 
     it {
       should contain_file('nrpe_plugin_check_load').with({
@@ -58,7 +61,12 @@ describe 'nrpe::plugin' do
 
     it {
       should contain_file('nrpe_plugin_check_load') \
-        .with_content(/^command\[check_load\]=\/usr\/lib64\/nagios\/plugins\/check_load -w 10,8,8 -c 12,10,9$/)
+        .with_content(/^command\[check_load\]=\/usr\/lib64\/nagios\/plugins\/check_load$/)
+    }
+
+    it {
+      should_not contain_file('nrpe_plugin_check_load') \
+        .with_content(/^command\[check_load\]=\/usr\/lib64\/nagios\/plugins\/check_load UNSET$/)
     }
   end
 
@@ -78,7 +86,7 @@ describe 'nrpe::plugin' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe::plugin')
+        should contain_class('nrpe::plugin')
       }.to raise_error(Puppet::Error)
     end
   end

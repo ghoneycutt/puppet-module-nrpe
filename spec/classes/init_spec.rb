@@ -1,13 +1,12 @@
 require 'spec_helper'
 describe 'nrpe' do
 
-
   context 'with default options on unsupported osfamily' do
     let(:facts) { { :osfamily => 'Unsupported' } }
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe supports osfamilies RedHat and Suse. Detected osfamily is <Unsupported>./)
     end
   end
@@ -19,7 +18,9 @@ describe 'nrpe' do
       }
     end
 
-    it { should include_class('nrpe') }
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
 
     it {
       should contain_package('nrpe_package').with({
@@ -97,7 +98,9 @@ describe 'nrpe' do
       }
     end
 
-    it { should include_class('nrpe') }
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
 
     it {
       should contain_package('nrpe_package').with({
@@ -156,7 +159,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error)
     end
   end
@@ -171,7 +174,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::nrpe_config_mode must be a four digit octal mode. Detected value is <666>./)
     end
   end
@@ -186,7 +189,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error)
     end
   end
@@ -201,7 +204,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error)
     end
   end
@@ -216,7 +219,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <not_a_port>./)
     end
   end
@@ -231,7 +234,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <1000000>./)
     end
   end
@@ -246,7 +249,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <-23>./)
     end
   end
@@ -259,6 +262,8 @@ describe 'nrpe' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
   end
 
@@ -270,6 +275,8 @@ describe 'nrpe' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
   end
 
@@ -280,6 +287,8 @@ describe 'nrpe' do
         :lsbmajdistrelease => '6',
       }
     end
+
+    it { should compile.with_all_deps }
 
     it { should contain_file('nrpe_config').with_content(/^allowed_hosts=127.0.0.1,poller.example.com$/) }
   end
@@ -294,7 +303,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error)
     end
   end
@@ -309,7 +318,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::dont_blame_nrpe must be 0 or 1. Detected value is <2>./)
     end
   end
@@ -324,7 +333,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::allow_bash_command_substitution must be 0 or 1. Detected value is <2>./)
     end
   end
@@ -337,6 +346,8 @@ describe 'nrpe' do
       }
     end
 
+    it { should compile.with_all_deps }
+
     it { should contain_file('nrpe_config').with_content(/^command_prefix=\/usr\/bin\/sudo$/) }
   end
 
@@ -347,6 +358,8 @@ describe 'nrpe' do
         :lsbmajdistrelease => '6',
       }
     end
+
+    it { should compile.with_all_deps }
 
     it { should contain_file('nrpe_config').with_content(/^command_prefix=\/usr\/bin\/sudo$/) }
   end
@@ -361,7 +374,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error)
     end
   end
@@ -376,7 +389,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::debug must be 0 or 1. Detected value is <2>./)
     end
   end
@@ -391,7 +404,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::command_timeout must be a postive integer. Detected value is <-1>./)
     end
   end
@@ -406,7 +419,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::connection_timeout must be a postive integer. Detected value is <-1>./)
     end
   end
@@ -421,7 +434,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::allow_weak_random_seed must be 0 or 1. Detected value is <2>./)
     end
   end
@@ -436,7 +449,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error)
     end
   end
@@ -451,7 +464,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error,/nrpe::service_ensure must be \'running\' or \'stopped\'. Detected value is <present>./)
     end
   end
@@ -466,7 +479,7 @@ describe 'nrpe' do
 
     it 'should fail' do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error)
     end
   end
@@ -493,7 +506,9 @@ describe 'nrpe' do
       }
     end
 
-    it { should include_class('nrpe') }
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
 
     it {
       should contain_file('nrpe_plugin_check_root_partition').with({
@@ -550,7 +565,9 @@ describe 'nrpe' do
       }
     end
 
-    it { should include_class('nrpe') }
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
 
     it {
       should contain_file('nrpe_plugin_check_root_partition').with({
@@ -606,7 +623,9 @@ describe 'nrpe' do
       }
     end
 
-    it { should include_class('nrpe') }
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
 
     it {
       should contain_file('nrpe_plugin_check_root_partition').with({
@@ -651,7 +670,7 @@ describe 'nrpe' do
 
     it do
       expect {
-        should include_class('nrpe')
+        should contain_class('nrpe')
       }.to raise_error(Puppet::Error)
     end
   end
