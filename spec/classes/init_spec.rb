@@ -518,6 +518,7 @@ describe 'nrpe' do
         'group'   => 'root',
         'mode'    => '0644',
         'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
       })
     }
 
@@ -534,6 +535,7 @@ describe 'nrpe' do
         'group'   => 'root',
         'mode'    => '0644',
         'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
       })
     }
 
@@ -577,6 +579,7 @@ describe 'nrpe' do
         'group'   => 'root',
         'mode'    => '0644',
         'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
       })
     }
 
@@ -593,6 +596,7 @@ describe 'nrpe' do
         'group'   => 'root',
         'mode'    => '0644',
         'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
       })
     }
 
@@ -635,6 +639,7 @@ describe 'nrpe' do
         'group'   => 'root',
         'mode'    => '0644',
         'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
       })
     }
 
@@ -651,6 +656,7 @@ describe 'nrpe' do
         'group'   => 'root',
         'mode'    => '0644',
         'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
       })
     }
 
