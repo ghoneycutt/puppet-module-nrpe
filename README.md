@@ -239,6 +239,12 @@ nrpe::plugins:
 
 ## Parameters
 
+ensure
+------
+Ensure the plugin exists. Valid values are `present` and `absent`.
+
+- *Default*: present
+
 args
 ----
 Arguments to pass to the plugin.

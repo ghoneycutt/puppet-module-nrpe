@@ -496,6 +496,9 @@ describe 'nrpe' do
           'check_load' => {
             'args' => '-w 10,8,8 -c 12,10,9',
           },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
         }
       }
     }
@@ -543,6 +546,18 @@ describe 'nrpe' do
       should contain_file('nrpe_plugin_check_load') \
         .with_content(/^command\[check_load\]=\/usr\/lib\/nagios\/plugins\/check_load -w 10,8,8 -c 12,10,9$/)
     }
+
+    it {
+      should contain_file('nrpe_plugin_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
   end
 
   context 'with plugins specified as a hash on 64 bit EL 6' do
@@ -556,6 +571,9 @@ describe 'nrpe' do
           },
           'check_load' => {
             'args' => '-w 10,8,8 -c 12,10,9',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
           },
         }
       }
@@ -604,6 +622,18 @@ describe 'nrpe' do
       should contain_file('nrpe_plugin_check_load') \
         .with_content(/^command\[check_load\]=\/usr\/lib64\/nagios\/plugins\/check_load -w 10,8,8 -c 12,10,9$/)
     }
+
+    it {
+      should contain_file('nrpe_plugin_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
   end
 
   context 'with plugins specified as a hash on Suse 11' do
@@ -617,6 +647,9 @@ describe 'nrpe' do
           },
           'check_load' => {
             'args' => '-w 10,8,8 -c 12,10,9',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
           },
         }
       }
@@ -663,6 +696,18 @@ describe 'nrpe' do
     it {
       should contain_file('nrpe_plugin_check_load') \
         .with_content(/^command\[check_load\]=\/usr\/lib\/nagios\/plugins\/check_load -w 10,8,8 -c 12,10,9$/)
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
     }
   end
 
