@@ -32,7 +32,7 @@ class nrpe (
   $allow_weak_random_seed           = '0',
   $include_dir                      = 'USE_DEFAULTS',
   $service_ensure                   = 'running',
-  $service_name                     = 'nrpe',
+  $service_name                     = 'USE_DEFAULTS',
   $service_enable                   = true,
   $plugins                          = undef,
 ) {
@@ -40,6 +40,7 @@ class nrpe (
   # OS platform defaults
   case $::osfamily {
     'RedHat': {
+      $default_service_name                     = 'nrpe',
       $default_nrpe_package                     = 'nrpe'
       $default_nrpe_package_adminfile           = undef
       $default_nrpe_package_source              = undef
@@ -59,6 +60,7 @@ class nrpe (
       }
     }
     'Suse': {
+      $default_service_name           = 'nrpe',
       $default_nrpe_package           = 'nagios-nrpe'
       $default_nrpe_package_adminfile = undef
       $default_nrpe_package_source    = undef
@@ -70,6 +72,7 @@ class nrpe (
       $default_include_dir            = '/etc/nrpe.d'
     }
     'Solaris': {
+      $default_service_name                     = 'nrpe',
       $default_nrpe_package                     = 'nrpe'
       $default_nrpe_package_adminfile           = undef
       $default_nrpe_package_source              = undef
@@ -84,6 +87,7 @@ class nrpe (
       $default_include_dir                      = '/usr/local/nagios/etc/nrpe.d'
     }
     'Debian': {
+      $default_service_name                     = 'nagios-nrpe-server',
       $default_nrpe_package                     = 'nagios-nrpe-server'
       $default_nrpe_package_adminfile           = undef
       $default_nrpe_package_source              = undef
@@ -103,6 +107,12 @@ class nrpe (
   }
 
   # Use defaults if a value was not specified in Hiera.
+  if $service_name == 'USE_DEFAULTS' {
+    $service_name_real = $default_service_name
+  } else {
+    $service_name_real = $service_name
+  }
+
   if $nrpe_package == 'USE_DEFAULTS' {
     $nrpe_package_real = $default_nrpe_package
   } else {
@@ -260,7 +270,7 @@ class nrpe (
 
   service { 'nrpe_service':
     ensure    => $service_ensure,
-    name      => $service_name,
+    name      => $service_name_real,
     enable    => $service_enable_bool,
     subscribe => File['nrpe_config'],
   }
