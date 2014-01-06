@@ -40,7 +40,7 @@ class nrpe (
   # OS platform defaults
   case $::osfamily {
     'RedHat': {
-      $default_service_name                     = 'nrpe',
+      $default_service_name                     = 'nrpe'
       $default_nrpe_package                     = 'nrpe'
       $default_nrpe_package_adminfile           = undef
       $default_nrpe_package_source              = undef
@@ -60,7 +60,7 @@ class nrpe (
       }
     }
     'Suse': {
-      $default_service_name           = 'nrpe',
+      $default_service_name           = 'nrpe'
       $default_nrpe_package           = 'nagios-nrpe'
       $default_nrpe_package_adminfile = undef
       $default_nrpe_package_source    = undef
@@ -72,7 +72,7 @@ class nrpe (
       $default_include_dir            = '/etc/nrpe.d'
     }
     'Solaris': {
-      $default_service_name                     = 'nrpe',
+      $default_service_name                     = 'nrpe'
       $default_nrpe_package                     = 'nrpe'
       $default_nrpe_package_adminfile           = undef
       $default_nrpe_package_source              = undef
@@ -87,7 +87,7 @@ class nrpe (
       $default_include_dir                      = '/usr/local/nagios/etc/nrpe.d'
     }
     'Debian': {
-      $default_service_name                     = 'nagios-nrpe-server',
+      $default_service_name                     = 'nagios-nrpe-server'
       $default_nrpe_package                     = 'nagios-nrpe-server'
       $default_nrpe_package_adminfile           = undef
       $default_nrpe_package_source              = undef
