@@ -35,6 +35,7 @@ class nrpe (
   $service_name                     = 'nrpe',
   $service_enable                   = true,
   $plugins                          = undef,
+  $purge_plugins                    = false,
 ) {
 
   # OS platform defaults
@@ -166,6 +167,12 @@ class nrpe (
     $service_enable_bool = $service_enable
   }
 
+  if type($purge_plugins) == 'string' {
+    $purge_plugins_bool = str2bool($purge_plugins)
+  } else {
+    $purge_plugins_bool = $purge_plugins
+  }
+
   # Validate params
   validate_re($nrpe_config_mode, '^\d{4}$',
     "nrpe::nrpe_config_mode must be a four digit octal mode. Detected value is <${nrpe_config_mode}>.")
@@ -226,6 +233,8 @@ class nrpe (
     owner   => $nrpe_config_owner,
     group   => $nrpe_config_group,
     mode    => $nrpe_config_mode,
+    purge   => $purge_plugins_bool,
+    recurse => true,
     require => Package['nrpe_package'],
     notify  => Service['nrpe_service'],
   }
