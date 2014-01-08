@@ -212,6 +212,12 @@ Hash of plugins to be passed to nrpe::plugin with create_resources().
 
 - *Default*: undef
 
+purge_plugins
+-------------
+Boolean to purge the nrpe.d directory of entries not managed by Puppet.
+
+- *Default*: false
+
 ===
 
 # Define `nrpe::plugin`

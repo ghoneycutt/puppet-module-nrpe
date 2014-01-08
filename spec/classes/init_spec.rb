@@ -76,6 +76,8 @@ describe 'nrpe' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
+        'purge'   => 'false',
+        'recurse' => 'true',
         'require' => 'Package[nrpe_package]',
         'notify'  => 'Service[nrpe_service]',
       })
@@ -723,6 +725,47 @@ describe 'nrpe' do
       expect {
         should contain_class('nrpe')
       }.to raise_error(Puppet::Error)
+    end
+  end
+
+  context 'with purge_plugins specified as not close to a boolean' do
+    let(:params) { { :purge_plugins => 'not even close to a boolean' } }
+    let(:facts) do
+      { :osfamily          => 'RedHat',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it do
+      expect {
+        should contain_class('nrpe')
+      }.to raise_error(Puppet::Error)
+    end
+  end
+
+
+  ['true',true,'false',false].each do |value|
+    context "with purge_plugins specified as #{value}" do
+      let(:params) { { :purge_plugins => value } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it {
+        should contain_file('nrpe_config_dot_d').with({
+          'ensure'  => 'directory',
+          'path'    => '/etc/nrpe.d',
+          'owner'   => 'root',
+          'group'   => 'root',
+          'mode'    => '0644',
+          'purge'   => value,
+          'recurse' => 'true',
+          'require' => 'Package[nrpe_package]',
+          'notify'  => 'Service[nrpe_service]',
+        })
+      }
     end
   end
 end
