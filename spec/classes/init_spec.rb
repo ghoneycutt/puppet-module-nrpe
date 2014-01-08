@@ -114,6 +114,16 @@ describe 'nrpe' do
     }
 
     it {
+      should contain_package('nagios_plugins_package').with({
+        'ensure'    => 'present',
+        'name'      => 'nagios-plugins',
+        'adminfile' => nil,
+        'source'    => nil,
+        'before'    => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
       should contain_file('nrpe_config').with({
         'ensure'  => 'file',
         'path'    => '/etc/nagios/nrpe.cfg',
