@@ -7,7 +7,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe supports osfamilies RedHat and Suse. Detected osfamily is <Unsupported>./)
+      }.to raise_error(Puppet::Error,/nrpe supports osfamilies RedHat, Suse, Solaris and Debian (Ubuntu). Detected osfamily is <Unsupported>./)
     end
   end
 
@@ -149,6 +149,87 @@ describe 'nrpe' do
     }
   end
 
+  context 'with default options on Debian (Ubuntu)' do
+    let(:facts) do
+      { :osfamily          => 'Debian',
+        :lsbdistid         => 'Ubuntu',
+        :lsbmajdistrelease => '12',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_package('nrpe_package').with({
+        'ensure'    => 'present',
+        'name'      => 'nagios-nrpe-server',
+        'adminfile' => nil,
+        'source'    => nil,
+      })
+    }
+
+    it {
+      should contain_package('nagios_plugins_package').with({
+        'ensure'    => 'present',
+        'name'      => 'nagios-plugins-basic',
+        'adminfile' => nil,
+        'source'    => nil,
+        'before'    => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_config').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nagios/nrpe.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'Package[nrpe_package]',
+      })
+    }
+
+    it { should contain_file('nrpe_config').with_content(/^log_facility=daemon$/) }
+    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nagios\/nrpe.pid$/) }
+    it { should contain_file('nrpe_config').with_content(/^server_port=5666$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
+    it { should contain_file('nrpe_config').with_content(/^nrpe_user=nagios$/) }
+    it { should contain_file('nrpe_config').with_content(/^nrpe_group=nagios$/) }
+    it { should contain_file('nrpe_config').with_content(/^allowed_hosts=127.0.0.1$/) }
+    it { should contain_file('nrpe_config').with_content(/^dont_blame_nrpe=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^allow_bash_command_substitution=0$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^command_prefix=\/usr\/bin\/sudo$/) }
+    it { should contain_file('nrpe_config').with_content(/^debug=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^command_timeout=60$/) }
+    it { should contain_file('nrpe_config').with_content(/^connection_timeout=300$/) }
+    it { should contain_file('nrpe_config').with_content(/^allow_weak_random_seed=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^include_dir=\/etc\/nagios\/nrpe.d$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^command\[$/) }
+
+    it {
+      should contain_file('nrpe_config_dot_d').with({
+        'ensure'  => 'directory',
+        'path'    => '/etc/nagios/nrpe.d',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'Package[nrpe_package]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_service('nrpe_service').with({
+        'ensure'    => 'running',
+        'name'      => 'nagios-nrpe-server',
+        'enable'    => true,
+        'subscribe' => 'File[nrpe_config]',
+      })
+    }
+  end
+
   context 'with nrpe_config set to a non absolute path' do
     let(:params) { { :nrpe_config => 'invalid/path' } }
     let(:facts) do
@@ -179,6 +260,85 @@ describe 'nrpe' do
     end
   end
 
+  context 'with default options on Solaris' do
+    let(:facts) do
+      { :osfamily          => 'Solaris',
+        :kernelrelase      => '5.10',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_package('nrpe_package').with({
+        'ensure'    => 'present',
+        'name'      => 'nrpe',
+        'adminfile' => nil,
+        'source'    => nil,
+      })
+    }
+
+    it {
+      should contain_package('nagios_plugins_package').with({
+        'ensure'    => 'present',
+        'name'      => 'nagios-plugins',
+        'adminfile' => nil,
+        'source'    => nil,
+        'before'    => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_config').with({
+        'ensure'  => 'file',
+        'path'    => '/usr/local/nagios/etc/nrpe.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'Package[nrpe_package]',
+      })
+    }
+
+    it { should contain_file('nrpe_config').with_content(/^log_facility=daemon$/) }
+    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nagios\/nrpe.pid$/) }
+    it { should contain_file('nrpe_config').with_content(/^server_port=5666$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
+    it { should contain_file('nrpe_config').with_content(/^nrpe_user=nagios$/) }
+    it { should contain_file('nrpe_config').with_content(/^nrpe_group=nagios$/) }
+    it { should contain_file('nrpe_config').with_content(/^allowed_hosts=127.0.0.1$/) }
+    it { should contain_file('nrpe_config').with_content(/^dont_blame_nrpe=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^allow_bash_command_substitution=0$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^command_prefix=\/usr\/bin\/sudo$/) }
+    it { should contain_file('nrpe_config').with_content(/^debug=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^command_timeout=60$/) }
+    it { should contain_file('nrpe_config').with_content(/^connection_timeout=300$/) }
+    it { should contain_file('nrpe_config').with_content(/^allow_weak_random_seed=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^include_dir=\/usr\/local\/nagios\/etc\/nrpe.d$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^command\[$/) }
+
+    it {
+      should contain_file('nrpe_config_dot_d').with({
+        'ensure'  => 'directory',
+        'path'    => '/usr/local/nagios/etc/nrpe.d',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'Package[nrpe_package]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_service('nrpe_service').with({
+        'ensure'    => 'running',
+        'name'      => 'nrpe',
+        'enable'    => true,
+        'subscribe' => 'File[nrpe_config]',
+      })
+    }
+  end
   context 'with libexecdir set to a non absolute path' do
     let(:params) { { :libexecdir => 'invalid/path' } }
     let(:facts) do
@@ -702,6 +862,157 @@ describe 'nrpe' do
       should contain_file('nrpe_plugin_check_me_out').with({
         'ensure'  => 'absent',
         'path'    => '/etc/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+  end
+
+  context 'with plugins specified as a hash on Debian (Ubuntu) 12' do
+    let(:params) {
+      {
+        :plugins => {
+          'check_root_partition' => {
+            'plugin'     => 'check_disk',
+            'libexecdir' => '/usr/lib/nagios/plugins',
+            'args'       => '-w 20% -c 10% -p /',
+          },
+          'check_load' => {
+            'args'       => '-w 10,8,8 -c 12,10,9',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :osfamily          => 'Debian',
+        :lsbdisid          => 'Ubuntu',
+        :lsbmajdistrelease => '12',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nagios/nrpe.d/check_root_partition.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition') \
+        .with_content(/^command\[check_root_partition\]=\/usr\/lib\/nagios\/plugins\/check_disk -w 20% -c 10% -p \/$/)
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nagios/nrpe.d/check_load.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load') \
+        .with_content(/^command\[check_load\]=\/usr\/lib\/nagios\/plugins\/check_load -w 10,8,8 -c 12,10,9$/)
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nagios/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+  end
+
+  context 'with plugins specified as a hash on Solaris 10' do
+    let(:params) {
+      {
+        :plugins => {
+          'check_root_partition' => {
+            'plugin'     => 'check_disk',
+            'libexecdir' => '/usr/local/nagios/libexec',
+            'args'       => '-w 20% -c 10% -p /',
+          },
+          'check_load' => {
+            'args' => '-w 10,8,8 -c 12,10,9',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :osfamily      => 'Solaris',
+        :kernelrelease => '5.10',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition').with({
+        'ensure'  => 'file',
+        'path'    => '/usr/local/nagios/etc/nrpe.d/check_root_partition.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition') \
+        .with_content(/^command\[check_root_partition\]=\/usr\/local\/nagios\/libexec\/check_disk -w 20% -c 10% -p \/$/)
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load').with({
+        'ensure'  => 'file',
+        'path'    => '/usr/local/nagios/etc/nrpe.d/check_load.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load') \
+        .with_content(/^command\[check_load\]=\/usr\/local\/nagios\/libexec\/check_load -w 10,8,8 -c 12,10,9$/)
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/usr/local/nagios/etc/nrpe.d/check_me_out.cfg',
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',

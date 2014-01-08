@@ -76,12 +76,12 @@ class nrpe (
       $default_nrpe_package                     = 'nrpe'
       $default_nrpe_package_adminfile           = undef
       $default_nrpe_package_source              = undef
-      $default_nagios_plugins_package           = undef
+      $default_nagios_plugins_package           = 'nagios-plugins'
       $default_nagios_plugins_package_adminfile = undef
       $default_nagios_plugins_package_source    = undef
       $default_nrpe_config                      = '/usr/local/nagios/etc/nrpe.cfg'
       $default_libexecdir                       = '/usr/local/nagios/libexec '
-      $default_pid_file                         = '/var/run/nrpe/nrpe.pid'
+      $default_pid_file                         = '/var/run/nagios/nrpe.pid'
       $default_nrpe_user                        = 'nagios'
       $default_nrpe_group                       = 'nagios'
       $default_include_dir                      = '/usr/local/nagios/etc/nrpe.d'
