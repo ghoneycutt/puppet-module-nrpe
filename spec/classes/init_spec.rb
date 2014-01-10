@@ -7,7 +7,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe supports osfamilies RedHat, Suse, Solaris and Debian (Ubuntu). Detected osfamily is <Unsupported>./)
+      }.to raise_error(Puppet::Error,/nrpe supports RedHat, Suse, Solaris and Ubuntu. Detected osfamily is <Unsupported>./)
     end
   end
 
@@ -161,7 +161,22 @@ describe 'nrpe' do
     }
   end
 
-  context 'with default options on Debian (Ubuntu)' do
+  context 'with default options on osfamily Debian with unsupported lsbdistid' do
+    let(:facts) do
+      { :osfamily          => 'Debian',
+        :lsbdistid         => 'Debian',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it 'should fail' do
+      expect {
+        should contain_class('nrpe')
+      }.to raise_error(Puppet::Error,/nrpe supports lsbdistid Ubuntu in the osfamily Debian. Detected operatingsystem is <Debian>./)
+    end
+  end
+
+  context 'with default options on Ubuntu' do
     let(:facts) do
       { :osfamily          => 'Debian',
         :lsbdistid         => 'Ubuntu',
@@ -883,7 +898,7 @@ describe 'nrpe' do
     }
   end
 
-  context 'with plugins specified as a hash on Debian (Ubuntu) 12' do
+  context 'with plugins specified as a hash on Ubuntu 12' do
     let(:params) {
       {
         :plugins => {
@@ -903,7 +918,7 @@ describe 'nrpe' do
     }
     let(:facts) do
       { :osfamily          => 'Debian',
-        :lsbdisid          => 'Ubuntu',
+        :lsbdistid         => 'Ubuntu',
         :lsbmajdistrelease => '12',
       }
     end

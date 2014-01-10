@@ -14,7 +14,7 @@ This module is built for use with Puppet v3 and is tested on the following OS fa
 * EL 6
 * Suse 11
 * Solaris 10
-* Debian (Ubuntu) 12
+* Ubuntu 12
 
 ===
 

@@ -73,7 +73,7 @@ class nrpe (
       $default_nrpe_user                        = 'nagios'
       $default_nrpe_group                       = 'nagios'
       $default_include_dir                      = '/etc/nrpe.d'
-      $default_service_name                     = 'nrpe',
+      $default_service_name                     = 'nrpe'
     }
     'Solaris': {
       $default_service_name                     = 'nrpe'
@@ -84,29 +84,36 @@ class nrpe (
       $default_nagios_plugins_package_adminfile = undef
       $default_nagios_plugins_package_source    = undef
       $default_nrpe_config                      = '/usr/local/nagios/etc/nrpe.cfg'
-      $default_libexecdir                       = '/usr/local/nagios/libexec '
+      $default_libexecdir                       = '/usr/local/nagios/libexec'
       $default_pid_file                         = '/var/run/nagios/nrpe.pid'
       $default_nrpe_user                        = 'nagios'
       $default_nrpe_group                       = 'nagios'
       $default_include_dir                      = '/usr/local/nagios/etc/nrpe.d'
     }
     'Debian': {
-      $default_service_name                     = 'nagios-nrpe-server'
-      $default_nrpe_package                     = 'nagios-nrpe-server'
-      $default_nrpe_package_adminfile           = undef
-      $default_nrpe_package_source              = undef
-      $default_nagios_plugins_package           = 'nagios-plugins-basic'
-      $default_nagios_plugins_package_adminfile = undef
-      $default_nagios_plugins_package_source    = undef
-      $default_nrpe_config                      = '/etc/nagios/nrpe.cfg'
-      $default_libexecdir                       = '/usr/lib/nagios/plugins'
-      $default_pid_file                         = '/var/run/nagios/nrpe.pid'
-      $default_nrpe_user                        = 'nagios'
-      $default_nrpe_group                       = 'nagios'
-      $default_include_dir                      = '/etc/nagios/nrpe.d'
+      case $::lsbdistid {
+        'Ubuntu': {
+          $default_service_name                     = 'nagios-nrpe-server'
+          $default_nrpe_package                     = 'nagios-nrpe-server'
+          $default_nrpe_package_adminfile           = undef
+          $default_nrpe_package_source              = undef
+          $default_nagios_plugins_package           = 'nagios-plugins-basic'
+          $default_nagios_plugins_package_adminfile = undef
+          $default_nagios_plugins_package_source    = undef
+          $default_nrpe_config                      = '/etc/nagios/nrpe.cfg'
+          $default_libexecdir                       = '/usr/lib/nagios/plugins'
+          $default_pid_file                         = '/var/run/nagios/nrpe.pid'
+          $default_nrpe_user                        = 'nagios'
+          $default_nrpe_group                       = 'nagios'
+          $default_include_dir                      = '/etc/nagios/nrpe.d'
+        }
+        default: {
+          fail("nrpe supports lsbdistid Ubuntu in the osfamily Debian. Detected operatingsystem is <${::lsbdistid}>.")
+        }
+      }
     }
     default: {
-      fail("nrpe supports osfamilies RedHat, Suse, Solaris and Debian (Ubuntu). Detected osfamily is <${::osfamily}>.")
+      fail("nrpe supports RedHat, Suse, Solaris and Ubuntu. Detected osfamily is <${::osfamily}>.")
     }
   }
 
