@@ -13,6 +13,8 @@ This module is built for use with Puppet v3 and is tested on the following OS fa
 
 * EL 6
 * Suse 11
+* Solaris 10
+* Ubuntu 12
 
 ===
 
@@ -198,7 +200,7 @@ service_name
 --------------
 Value of name parameter for nrpe service.
 
-- *Default*: 'nrpe'
+- *Default*: based on OS platform.
 
 service_enable
 --------------
