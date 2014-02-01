@@ -9,7 +9,8 @@ Manage NRPE
 
 # Compatibility
 ---------------
-This module is built for use with Puppet v3 and is tested on the following OS families.
+This module supports Puppet v3 with Ruby 1.8.7, 1.9.3, and 2.0.0.
+It is tested on the following OS families.
 
 * EL 6
 * Suse 11
