@@ -23,18 +23,16 @@ describe 'nrpe' do
     it { should contain_class('nrpe') }
 
     it {
-      should contain_package('nrpe_package').with({
+      should contain_package('nrpe').with({
         'ensure'    => 'present',
-        'name'      => 'nrpe',
         'adminfile' => nil,
         'source'    => nil,
       })
     }
 
     it {
-      should contain_package('nagios_plugins_package').with({
+      should contain_package('nagios-plugins').with({
         'ensure'    => 'present',
-        'name'      => 'nagios-plugins',
         'adminfile' => nil,
         'source'    => nil,
         'before'    => 'Service[nrpe_service]',
@@ -48,7 +46,7 @@ describe 'nrpe' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'Package[nrpe_package]',
+        'require' => 'Package[nrpe]',
       })
     }
 
@@ -78,7 +76,7 @@ describe 'nrpe' do
         'mode'    => '0644',
         'purge'   => 'false',
         'recurse' => 'true',
-        'require' => 'Package[nrpe_package]',
+        'require' => 'Package[nrpe]',
         'notify'  => 'Service[nrpe_service]',
       })
     }
@@ -105,18 +103,16 @@ describe 'nrpe' do
     it { should contain_class('nrpe') }
 
     it {
-      should contain_package('nrpe_package').with({
+      should contain_package('nagios-nrpe').with({
         'ensure'    => 'present',
-        'name'      => 'nagios-nrpe',
         'adminfile' => nil,
         'source'    => nil,
       })
     }
 
     it {
-      should contain_package('nagios_plugins_package').with({
+      should contain_package('nagios-plugins').with({
         'ensure'    => 'present',
-        'name'      => 'nagios-plugins',
         'adminfile' => nil,
         'source'    => nil,
         'before'    => 'Service[nrpe_service]',
@@ -130,7 +126,7 @@ describe 'nrpe' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'Package[nrpe_package]',
+        'require' => 'Package[nagios-nrpe]',
       })
     }
 
@@ -189,18 +185,16 @@ describe 'nrpe' do
     it { should contain_class('nrpe') }
 
     it {
-      should contain_package('nrpe_package').with({
+      should contain_package('nagios-nrpe-server').with({
         'ensure'    => 'present',
-        'name'      => 'nagios-nrpe-server',
         'adminfile' => nil,
         'source'    => nil,
       })
     }
 
     it {
-      should contain_package('nagios_plugins_package').with({
+      should contain_package('nagios-plugins-basic').with({
         'ensure'    => 'present',
-        'name'      => 'nagios-plugins-basic',
         'adminfile' => nil,
         'source'    => nil,
         'before'    => 'Service[nrpe_service]',
@@ -214,7 +208,7 @@ describe 'nrpe' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'Package[nrpe_package]',
+        'require' => 'Package[nagios-nrpe-server]',
       })
     }
 
@@ -242,7 +236,7 @@ describe 'nrpe' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'Package[nrpe_package]',
+        'require' => 'Package[nagios-nrpe-server]',
         'notify'  => 'Service[nrpe_service]',
       })
     }
@@ -299,18 +293,16 @@ describe 'nrpe' do
     it { should contain_class('nrpe') }
 
     it {
-      should contain_package('nrpe_package').with({
+      should contain_package('nrpe').with({
         'ensure'    => 'present',
-        'name'      => 'nrpe',
         'adminfile' => nil,
         'source'    => nil,
       })
     }
 
     it {
-      should contain_package('nagios_plugins_package').with({
+      should contain_package('nagios-plugins').with({
         'ensure'    => 'present',
-        'name'      => 'nagios-plugins',
         'adminfile' => nil,
         'source'    => nil,
         'before'    => 'Service[nrpe_service]',
@@ -324,7 +316,7 @@ describe 'nrpe' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'Package[nrpe_package]',
+        'require' => 'Package[nrpe]',
       })
     }
 
@@ -352,7 +344,7 @@ describe 'nrpe' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'Package[nrpe_package]',
+        'require' => 'Package[nrpe]',
         'notify'  => 'Service[nrpe_service]',
       })
     }
@@ -1098,10 +1090,128 @@ describe 'nrpe' do
           'mode'    => '0644',
           'purge'   => value,
           'recurse' => 'true',
-          'require' => 'Package[nrpe_package]',
+          'require' => 'Package[nrpe]',
           'notify'  => 'Service[nrpe_service]',
         })
       }
+    end
+  end
+
+  describe 'with nrpe_package parameter' do
+    context 'set to a string' do
+      let(:params) { { :nrpe_package => 'mynrpe' } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it {
+        should contain_package('mynrpe').with({
+          'ensure'    => 'present',
+          'adminfile' => nil,
+          'source'    => nil,
+        })
+      }
+    end
+
+    context 'set to an array' do
+      let(:params) { { :nrpe_package => ['mynrpe','nrpe_dep'] } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it {
+        should contain_package('mynrpe').with({
+          'ensure'    => 'present',
+          'adminfile' => nil,
+          'source'    => nil,
+        })
+      }
+
+      it {
+        should contain_package('nrpe_dep').with({
+          'ensure'    => 'present',
+          'adminfile' => nil,
+          'source'    => nil,
+        })
+      }
+    end
+
+    context 'set to an invalid type (boolean)' do
+      let(:params) { { :nrpe_package => true } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it do
+        expect {
+          should contain_class('nrpe')
+        }.to raise_error(Puppet::Error,/nrpe::nrpe_package must be a string or an array./)
+      end
+    end
+  end
+
+  describe 'with nagios_plugins_package parameter' do
+    context 'set to a string' do
+      let(:params) { { :nagios_plugins_package => 'nagios-plugins' } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it {
+        should contain_package('nagios-plugins').with({
+          'ensure'    => 'present',
+          'adminfile' => nil,
+          'source'    => nil,
+        })
+      }
+    end
+
+    context 'set to an array' do
+      let(:params) { { :nagios_plugins_package => ['nagios-plugins','nagios-plugins-dep'] } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it {
+        should contain_package('nagios-plugins').with({
+          'ensure'    => 'present',
+          'adminfile' => nil,
+          'source'    => nil,
+        })
+      }
+
+      it {
+        should contain_package('nagios-plugins-dep').with({
+          'ensure'    => 'present',
+          'adminfile' => nil,
+          'source'    => nil,
+        })
+      }
+    end
+
+    context 'set to an invalid type (boolean)' do
+      let(:params) { { :nagios_plugins_package => true } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it do
+        expect {
+          should contain_class('nrpe')
+        }.to raise_error(Puppet::Error,/nrpe::nagios_plugins_package must be a string or an array./)
+      end
     end
   end
 end

@@ -130,6 +130,10 @@ class nrpe (
     $nrpe_package_real = $nrpe_package
   }
 
+  if type($nrpe_package_real) != 'String' and type($nrpe_package_real) != 'Array' {
+    fail('nrpe::nrpe_package must be a string or an array.')
+  }
+
   if $nrpe_package_adminfile == 'USE_DEFAULTS' {
     $nrpe_package_adminfile_real = $default_nrpe_package_adminfile
   } else {
@@ -146,6 +150,10 @@ class nrpe (
     $nagios_plugins_package_real = $default_nagios_plugins_package
   } else {
     $nagios_plugins_package_real = $nagios_plugins_package
+  }
+
+  if type($nagios_plugins_package_real) != 'String' and type($nagios_plugins_package_real) != 'Array' {
+    fail('nrpe::nagios_plugins_package must be a string or an array.')
   }
 
   if $nagios_plugins_package_adminfile == 'USE_DEFAULTS' {
@@ -250,16 +258,14 @@ class nrpe (
   validate_re($service_ensure, '^(running|stopped)$',
     "nrpe::service_ensure must be \'running\' or \'stopped\'. Detected value is <${service_ensure}>.")
 
-  package { 'nrpe_package':
+  package { $nrpe_package_real:
     ensure    => 'present',
-    name      => $nrpe_package_real,
     adminfile => $nrpe_package_adminfile_real,
     source    => $nrpe_package_source_real,
   }
 
-  package { 'nagios_plugins_package':
+  package { $nagios_plugins_package_real:
     ensure    => 'present',
-    name      => $nagios_plugins_package_real,
     adminfile => $nagios_plugins_package_adminfile_real,
     source    => $nagios_plugins_package_source_real,
     before    => Service['nrpe_service'],
@@ -272,7 +278,7 @@ class nrpe (
     owner   => $nrpe_config_owner,
     group   => $nrpe_config_group,
     mode    => $nrpe_config_mode,
-    require => Package['nrpe_package'],
+    require => Package[$nrpe_package_real],
   }
 
   file { 'nrpe_config_dot_d':
@@ -283,7 +289,7 @@ class nrpe (
     mode    => $nrpe_config_mode,
     purge   => $purge_plugins_bool,
     recurse => true,
-    require => Package['nrpe_package'],
+    require => Package[$nrpe_package_real],
     notify  => Service['nrpe_service'],
   }
 
