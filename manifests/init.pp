@@ -36,6 +36,7 @@ class nrpe (
   $service_enable                   = true,
   $plugins                          = undef,
   $purge_plugins                    = false,
+  $hiera_merge_plugins              = false,
 ) {
 
   # OS platform defaults
@@ -229,6 +230,12 @@ class nrpe (
     $purge_plugins_bool = $purge_plugins
   }
 
+  if type($hiera_merge_plugins) == 'string' {
+    $hiera_merge_plugins_bool = str2bool($hiera_merge_plugins)
+  } else {
+    $hiera_merge_plugins_bool = $hiera_merge_plugins
+  }
+
   # Validate params
   validate_re($nrpe_config_mode, '^\d{4}$',
     "nrpe::nrpe_config_mode must be a four digit octal mode. Detected value is <${nrpe_config_mode}>.")
@@ -301,7 +308,12 @@ class nrpe (
   }
 
   if $plugins != undef {
-    validate_hash($plugins)
-    create_resources('nrpe::plugin',$plugins)
+    if $hiera_merge_plugins_bool {
+      $plugins_real = hiera_hash(nrpe::plugins)
+    } else {
+      $plugins_real = $plugins
+    }
+    validate_hash($plugins_real)
+    create_resources('nrpe::plugin',$plugins_real)
   }
 }
