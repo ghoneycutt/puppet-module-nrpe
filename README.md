@@ -215,9 +215,7 @@ hiera_merge_plugins
 -------------------
 Boolean to control merges of all found instances of nrpe::plugins in Hiera. This is useful for specifying file resources at different levels of the hierarchy and having them all included in the catalog.
 
-This will default to 'true' in future versions.
-
-- *Default*: false
+- *Default*: true
 
 plugins
 -------

@@ -36,7 +36,7 @@ class nrpe (
   $service_enable                   = true,
   $plugins                          = undef,
   $purge_plugins                    = false,
-  $hiera_merge_plugins              = false,
+  $hiera_merge_plugins              = true,
 ) {
 
   # OS platform defaults
