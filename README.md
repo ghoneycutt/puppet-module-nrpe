@@ -209,6 +209,14 @@ Boolean value of enable parameter for nrpe service.
 
 - *Default*: true
 
+hiera_merge_plugins
+-------------------
+Boolean to control merges of all found instances of nrpe::plugins in Hiera. This is useful for specifying file resources at different levels of the hierarchy and having them all included in the catalog.
+
+This will default to 'true' in future versions.
+
+- *Default*: false
+
 plugins
 -------
 Hash of plugins to be passed to nrpe::plugin with create_resources().
