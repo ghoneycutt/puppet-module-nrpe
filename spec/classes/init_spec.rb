@@ -1097,6 +1097,34 @@ describe 'nrpe' do
     end
   end
 
+  context 'with hiera_merge_plugins specified as not close to a boolean' do
+    let(:params) { { :hiera_merge_plugins => 'not even close to a boolean' } }
+    let(:facts) do
+      { :osfamily          => 'RedHat',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it do
+      expect {
+        should contain_class('nrpe')
+      }.to raise_error(Puppet::Error)
+    end
+  end
+
+  ['true',true,'false',false].each do |value|
+    context "with hiera_merge_plugins specified as #{value}" do
+      let(:params) { { :hiera_merge_plugins => value } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it { should compile.with_all_deps }
+    end
+  end
+
   describe 'with nrpe_package parameter' do
     context 'set to a string' do
       let(:params) { { :nrpe_package => 'mynrpe' } }
