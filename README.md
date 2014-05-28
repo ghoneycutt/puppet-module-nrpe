@@ -3,7 +3,9 @@
 
 [![Build Status](https://travis-ci.org/ghoneycutt/puppet-module-nrpe.png?branch=master)](https://travis-ci.org/ghoneycutt/puppet-module-nrpe)
 
-Manage NRPE
+This module allows you to manage NRPE and its plugins. It does not name any of
+the plugins, so you can use whatever you like by specifying a hash of plugins
+and their associated parameters.
 
 ===
 
