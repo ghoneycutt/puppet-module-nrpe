@@ -309,7 +309,7 @@ class nrpe (
 
   if $plugins != undef {
     if $hiera_merge_plugins_bool {
-      $plugins_real = hiera_hash(nrpe::plugins)
+      $plugins_real = hiera_hash('nrpe::plugins')
     } else {
       $plugins_real = $plugins
     }
