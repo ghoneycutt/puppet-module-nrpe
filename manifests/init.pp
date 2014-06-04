@@ -50,7 +50,7 @@ class nrpe (
       $default_nagios_plugins_package_adminfile = undef
       $default_nagios_plugins_package_source    = undef
       $default_nrpe_config                      = '/etc/nagios/nrpe.cfg'
-      $default_pid_file                         = '/var/run/nrpe/nrpe.pid'
+      $default_pid_file                         = '/var/run/nrpe.pid'
       $default_nrpe_user                        = 'nrpe'
       $default_nrpe_group                       = 'nrpe'
       $default_include_dir                      = '/etc/nrpe.d'
@@ -70,7 +70,7 @@ class nrpe (
       $default_nagios_plugins_package_source    = undef
       $default_nrpe_config                      = '/etc/nagios/nrpe.cfg'
       $default_libexecdir                       = '/usr/lib/nagios/plugins'
-      $default_pid_file                         = '/var/run/nrpe/nrpe.pid'
+      $default_pid_file                         = '/var/run/nrpe.pid'
       $default_nrpe_user                        = 'nagios'
       $default_nrpe_group                       = 'nagios'
       $default_include_dir                      = '/etc/nrpe.d'
@@ -103,7 +103,7 @@ class nrpe (
           $default_nagios_plugins_package_source    = undef
           $default_nrpe_config                      = '/etc/nagios/nrpe.cfg'
           $default_libexecdir                       = '/usr/lib/nagios/plugins'
-          $default_pid_file                         = '/var/run/nagios/nrpe.pid'
+          $default_pid_file                         = '/var/run/nrpe.pid'
           $default_nrpe_user                        = 'nagios'
           $default_nrpe_group                       = 'nagios'
           $default_include_dir                      = '/etc/nagios/nrpe.d'

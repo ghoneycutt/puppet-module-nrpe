@@ -51,7 +51,7 @@ describe 'nrpe' do
     }
 
     it { should contain_file('nrpe_config').with_content(/^log_facility=daemon$/) }
-    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nrpe\/nrpe.pid$/) }
+    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nrpe.pid$/) }
     it { should contain_file('nrpe_config').with_content(/^server_port=5666$/) }
     it { should_not contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
     it { should contain_file('nrpe_config').with_content(/^nrpe_user=nrpe$/) }
@@ -131,7 +131,7 @@ describe 'nrpe' do
     }
 
     it { should contain_file('nrpe_config').with_content(/^log_facility=daemon$/) }
-    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nrpe\/nrpe.pid$/) }
+    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nrpe.pid$/) }
     it { should contain_file('nrpe_config').with_content(/^server_port=5666$/) }
     it { should_not contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
     it { should contain_file('nrpe_config').with_content(/^nrpe_user=nagios$/) }
@@ -213,7 +213,7 @@ describe 'nrpe' do
     }
 
     it { should contain_file('nrpe_config').with_content(/^log_facility=daemon$/) }
-    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nagios\/nrpe.pid$/) }
+    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nrpe.pid$/) }
     it { should contain_file('nrpe_config').with_content(/^server_port=5666$/) }
     it { should_not contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
     it { should contain_file('nrpe_config').with_content(/^nrpe_user=nagios$/) }
