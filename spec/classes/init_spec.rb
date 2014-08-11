@@ -1184,6 +1184,38 @@ describe 'nrpe' do
     end
   end
 
+  describe 'with nrpe_package_ensure parameter' do
+    context 'set to a string' do
+      let(:params) { { :nrpe_package_ensure => 'latest' } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it {
+        should contain_package('nrpe').with({
+          'ensure'    => 'latest',
+        })
+      }
+    end
+
+    context 'set to an invalid type (boolean)' do
+      let(:params) { { :nrpe_package_ensure => true } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it do
+        expect {
+          should contain_class('nrpe')
+        }.to raise_error(Puppet::Error,/true is not a string./)
+      end
+    end
+  end
+
   describe 'with nagios_plugins_package parameter' do
     context 'set to a string' do
       let(:params) { { :nagios_plugins_package => 'nagios-plugins' } }
@@ -1239,6 +1271,38 @@ describe 'nrpe' do
         expect {
           should contain_class('nrpe')
         }.to raise_error(Puppet::Error,/nrpe::nagios_plugins_package must be a string or an array./)
+      end
+    end
+  end
+
+  describe 'with nagios_plugins_package_ensure parameter' do
+    context 'set to a string' do
+      let(:params) { { :nagios_plugins_package_ensure => 'latest' } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it {
+        should contain_package('nagios-plugins').with({
+          'ensure'    => 'latest',
+        })
+      }
+    end
+
+    context 'set to an invalid type (boolean)' do
+      let(:params) { { :nagios_plugins_package_ensure => true } }
+      let(:facts) do
+        { :osfamily          => 'RedHat',
+          :lsbmajdistrelease => '6',
+        }
+      end
+
+      it do
+        expect {
+          should contain_class('nrpe')
+        }.to raise_error(Puppet::Error,/true is not a string./)
       end
     end
   end
