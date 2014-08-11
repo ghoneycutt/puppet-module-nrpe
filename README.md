@@ -31,6 +31,12 @@ Name of package(s) for NRPE.
 
 - *Default*: based on OS platform.
 
+nrpe_package_ensure
+-------------------
+String to pass to ensure attribute for the NRPE package.
+
+- *Default*: 'present'
+
 nrpe_package_adminfile
 ----------------------
 Path to admin file for NRPE package.
@@ -48,6 +54,12 @@ nagios_plugins_package
 Name of package(s) for nagios-plugins.
 
 - *Default*: based on OS platform.
+
+nagios_plugins_package_ensure
+-----------------------------
+String to pass to ensure attribute for the nagios plugins package.
+
+- *Default*: 'present'
 
 nagios_plugins_package_adminfile
 --------------------------------
