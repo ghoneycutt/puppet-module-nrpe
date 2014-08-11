@@ -4,9 +4,11 @@
 #
 class nrpe (
   $nrpe_package                     = 'USE_DEFAULTS',
+  $nrpe_package_ensure              = 'present',
   $nrpe_package_adminfile           = 'USE_DEFAULTS',
   $nrpe_package_source              = 'USE_DEFAULTS',
   $nagios_plugins_package           = 'USE_DEFAULTS',
+  $nagios_plugins_package_ensure    = 'present',
   $nagios_plugins_package_adminfile = 'USE_DEFAULTS',
   $nagios_plugins_package_source    = 'USE_DEFAULTS',
   $nrpe_config                      = 'USE_DEFAULTS',
@@ -135,6 +137,8 @@ class nrpe (
     fail('nrpe::nrpe_package must be a string or an array.')
   }
 
+  validate_string($nrpe_package_ensure)
+
   if $nrpe_package_adminfile == 'USE_DEFAULTS' {
     $nrpe_package_adminfile_real = $default_nrpe_package_adminfile
   } else {
@@ -156,6 +160,8 @@ class nrpe (
   if type($nagios_plugins_package_real) != 'String' and type($nagios_plugins_package_real) != 'Array' {
     fail('nrpe::nagios_plugins_package must be a string or an array.')
   }
+
+  validate_string($nagios_plugins_package_ensure)
 
   if $nagios_plugins_package_adminfile == 'USE_DEFAULTS' {
     $nagios_plugins_package_adminfile_real = $default_nagios_plugins_package_adminfile
@@ -266,13 +272,13 @@ class nrpe (
     "nrpe::service_ensure must be \'running\' or \'stopped\'. Detected value is <${service_ensure}>.")
 
   package { $nrpe_package_real:
-    ensure    => 'present',
+    ensure    => $nrpe_package_ensure,
     adminfile => $nrpe_package_adminfile_real,
     source    => $nrpe_package_source_real,
   }
 
   package { $nagios_plugins_package_real:
-    ensure    => 'present',
+    ensure    => $nagios_plugins_package_ensure,
     adminfile => $nagios_plugins_package_adminfile_real,
     source    => $nagios_plugins_package_source_real,
     before    => Service['nrpe_service'],
