@@ -1196,8 +1196,6 @@ describe 'nrpe' do
       it {
         should contain_package('nrpe').with({
           'ensure'    => 'latest',
-          'adminfile' => nil,
-          'source'    => nil,
         })
       }
     end
@@ -1213,7 +1211,7 @@ describe 'nrpe' do
       it do
         expect {
           should contain_class('nrpe')
-        }.to raise_error(Puppet::Error,/nrpe::nrpe_package_ensure must be a string./)
+        }.to raise_error(Puppet::Error,/true is not a string./)
       end
     end
   end
@@ -1289,8 +1287,6 @@ describe 'nrpe' do
       it {
         should contain_package('nagios-plugins').with({
           'ensure'    => 'latest',
-          'adminfile' => nil,
-          'source'    => nil,
         })
       }
     end
@@ -1306,7 +1302,7 @@ describe 'nrpe' do
       it do
         expect {
           should contain_class('nrpe')
-        }.to raise_error(Puppet::Error,/nrpe::nagios_plugins_package_ensure must be a string./)
+        }.to raise_error(Puppet::Error,/true is not a string./)
       end
     end
   end

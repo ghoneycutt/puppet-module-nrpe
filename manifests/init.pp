@@ -137,9 +137,7 @@ class nrpe (
     fail('nrpe::nrpe_package must be a string or an array.')
   }
 
-  if type($nrpe_package_ensure) != 'String' {
-    fail('nrpe::nrpe_package_ensure must be a string')
-  }
+  validate_string($nrpe_package_ensure)
 
   if $nrpe_package_adminfile == 'USE_DEFAULTS' {
     $nrpe_package_adminfile_real = $default_nrpe_package_adminfile
@@ -163,9 +161,7 @@ class nrpe (
     fail('nrpe::nagios_plugins_package must be a string or an array.')
   }
 
-  if type($nagios_plugins_package_ensure) != 'String' {
-    fail('nrpe::nagios_plugins_package_ensure must be a string')
-  }
+  validate_string($nagios_plugins_package_ensure)
 
   if $nagios_plugins_package_adminfile == 'USE_DEFAULTS' {
     $nagios_plugins_package_adminfile_real = $default_nagios_plugins_package_adminfile
