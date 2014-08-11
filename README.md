@@ -33,7 +33,7 @@ Name of package(s) for NRPE.
 
 nrpe_package_ensure
 -------------------
-Enable of package(s) for NRPE.
+String to pass to ensure attribute for the NRPE package.
 
 - *Default*: 'present'
 
@@ -57,7 +57,7 @@ Name of package(s) for nagios-plugins.
 
 nagios_plugins_package_ensure
 -----------------------------
-Ensure of package(s) for nagios-plugins.
+String to pass to ensure attribute for the nagios plugins package.
 
 - *Default*: 'present'
 
