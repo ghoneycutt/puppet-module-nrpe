@@ -39,6 +39,7 @@ class nrpe (
   $plugins                          = undef,
   $purge_plugins                    = false,
   $hiera_merge_plugins              = false,
+  $nrpe_package_provider            = undef,
 ) {
 
   # OS platform defaults
@@ -289,6 +290,13 @@ class nrpe (
   validate_absolute_path($include_dir_real)
   validate_re($service_ensure, '^(running|stopped)$',
     "nrpe::service_ensure must be \'running\' or \'stopped\'. Detected value is <${service_ensure}>.")
+
+  if $nrpe_package_provider != undef {
+    validate_string($nrpe_package_provider)
+    Package {
+      provider => $nrpe_package_provider,
+    }
+  }
 
   package { $nrpe_package_real:
     ensure    => $nrpe_package_ensure,
