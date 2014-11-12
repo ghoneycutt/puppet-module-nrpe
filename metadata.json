@@ -51,6 +51,12 @@
       "operatingsystemrelease": [
         "12.04"
       ]
+    },
+{
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6"
+      ]
     }
   ],
   "name": "ghoneycutt-nrpe",
