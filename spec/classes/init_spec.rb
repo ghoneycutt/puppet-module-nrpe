@@ -7,7 +7,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe supports RedHat, Suse, Solaris and Ubuntu. Detected osfamily is <Unsupported>./)
+      }.to raise_error(Puppet::Error,/nrpe supports RedHat, Suse, Solaris, Debian and Ubuntu. Detected osfamily is <Unsupported>./)
     end
   end
 
