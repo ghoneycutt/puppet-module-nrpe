@@ -126,12 +126,12 @@ class nrpe (
           $default_include_dir                      = '/etc/nagios/nrpe.d'
         }
         default: {
-          fail("nrpe supports lsbdistid Ubuntu in the osfamily Debian. Detected operatingsystem is <${::lsbdistid}>.")
+          fail("nrpe supports lsbdistid Debian  Ubuntu in the osfamily Debian. Detected operatingsystem is <${::lsbdistid}>.")
         }
       }
     }
     default: {
-      fail("nrpe supports RedHat, Suse, Solaris and Ubuntu. Detected osfamily is <${::osfamily}>.")
+      fail("nrpe supports RedHat, Suse, Solaris, Debian  and Ubuntu. Detected osfamily is <${::osfamily}>.")
     }
   }
 
