@@ -18,6 +18,7 @@ It is tested on the following OS families.
 * Suse 11
 * Solaris 10
 * Ubuntu 12
+* Debian 6
 
 ===
 
