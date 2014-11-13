@@ -953,6 +953,82 @@ describe 'nrpe' do
       })
     }
   end
+  
+  context 'with plugins specified as a hash on Debian 6' do
+    let(:params) {
+      {
+        :plugins => {
+          'check_root_partition' => {
+            'plugin'     => 'check_disk',
+            'libexecdir' => '/usr/lib/nagios/plugins',
+            'args'       => '-w 20% -c 10% -p /',
+          },
+          'check_load' => {
+            'args'       => '-w 10,8,8 -c 12,10,9',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :osfamily          => 'Debian',
+        :lsbdistid         => 'Debian',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nagios/nrpe.d/check_root_partition.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_root_partition') \
+        .with_content(/^command\[check_root_partition\]=\/usr\/lib\/nagios\/plugins\/check_disk -w 20% -c 10% -p \/$/)
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nagios/nrpe.d/check_load.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_load') \
+        .with_content(/^command\[check_load\]=\/usr\/lib\/nagios\/plugins\/check_load -w 10,8,8 -c 12,10,9$/)
+    }
+
+    it {
+      should contain_file('nrpe_plugin_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nagios/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+  end
 
   context 'with plugins specified as a hash on Ubuntu 12' do
     let(:params) {
