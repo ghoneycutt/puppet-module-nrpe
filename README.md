@@ -14,6 +14,7 @@ and their associated parameters.
 This module supports Puppet v3 with Ruby 1.8.7, 1.9.3, and 2.0.0.
 It is tested on the following OS families.
 
+* Debian 6
 * EL 6
 * Suse 11
 * Solaris 10
