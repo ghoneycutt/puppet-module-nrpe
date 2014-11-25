@@ -95,6 +95,21 @@ class nrpe (
     }
     'Debian': {
       case $::lsbdistid {
+        'Debian': {
+          $default_service_name                     = 'nagios-nrpe-server'
+          $default_nrpe_package                     = 'nagios-nrpe-server'
+          $default_nrpe_package_adminfile           = undef
+          $default_nrpe_package_source              = undef
+          $default_nagios_plugins_package           = 'nagios-plugins-basic'
+          $default_nagios_plugins_package_adminfile = undef
+          $default_nagios_plugins_package_source    = undef
+          $default_nrpe_config                      = '/etc/nagios/nrpe.cfg'
+          $default_libexecdir                       = '/usr/lib/nagios/plugins'
+          $default_pid_file                         = '/var/run/nagios/nrpe.pid'
+          $default_nrpe_user                        = 'nagios'
+          $default_nrpe_group                       = 'nagios'
+          $default_include_dir                      = '/etc/nagios/nrpe.d'
+        }
         'Ubuntu': {
           $default_service_name                     = 'nagios-nrpe-server'
           $default_nrpe_package                     = 'nagios-nrpe-server'
@@ -111,12 +126,12 @@ class nrpe (
           $default_include_dir                      = '/etc/nagios/nrpe.d'
         }
         default: {
-          fail("nrpe supports lsbdistid Ubuntu in the osfamily Debian. Detected operatingsystem is <${::lsbdistid}>.")
+          fail("nrpe supports lsbdistid's Debian and Ubuntu in the osfamily Debian. Detected lsbdistid is <${::lsbdistid}>.")
         }
       }
     }
     default: {
-      fail("nrpe supports RedHat, Suse, Solaris and Ubuntu. Detected osfamily is <${::osfamily}>.")
+      fail("nrpe supports Debian, RedHat, Suse, Solaris and Ubuntu. Detected osfamily is <${::osfamily}>.")
     }
   }
 

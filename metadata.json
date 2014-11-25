@@ -11,6 +11,12 @@
   ],
   "operatingsystem_support": [
     {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6"
+      ]
+    },
+    {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "6"
@@ -66,22 +72,5 @@
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 3.2.0"
     }
-  ],
-  "types": [
-
-  ],
-  "checksums": {
-    "Gemfile": "6992d521994d948eb6e48acd733a07bf",
-    "LICENSE": "3a9bf9d0813d3120d042e42b976bdc31",
-    "Modulefile": "269fff7c4b84e13587cc4fb186d68293",
-    "README.md": "de229fe44601c4d1ca4e9d1484c7fdbb",
-    "Rakefile": "8ff6a0f7db638421d1742c5d365d0266",
-    "manifests/init.pp": "d00847d60eaf1d37b2843954b9b92823",
-    "manifests/plugin.pp": "8152c4955e0064369824f0c375ce1e12",
-    "spec/classes/init_spec.rb": "fa33b4328228fb7bafa9c515904bf540",
-    "spec/defines/plugin_spec.rb": "f64339c899db30dca463d05936fd3bf4",
-    "spec/spec_helper.rb": "3ea886dd135e120afa31e0aab12e85b0",
-    "templates/nrpe.cfg.erb": "29b67c8eef8f0b60a9e1489ebfe22624",
-    "templates/plugin.erb": "2c146e310d3e594b20a27aee9ceee5e1"
-  }
+  ]
 }
