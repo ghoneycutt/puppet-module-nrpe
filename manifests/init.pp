@@ -148,7 +148,7 @@ class nrpe (
     $nrpe_package_real = $nrpe_package
   }
 
-  if type($nrpe_package_real) != 'String' and type($nrpe_package_real) != 'Array' {
+  if !is_string($nrpe_package_real) and !is_array($nrpe_package_real) {
     fail('nrpe::nrpe_package must be a string or an array.')
   }
 
@@ -172,7 +172,7 @@ class nrpe (
     $nagios_plugins_package_real = $nagios_plugins_package
   }
 
-  if type($nagios_plugins_package_real) != 'String' and type($nagios_plugins_package_real) != 'Array' {
+  if !is_string($nagios_plugins_package_real) and !is_array($nagios_plugins_package_real) {
     fail('nrpe::nagios_plugins_package must be a string or an array.')
   }
 
@@ -227,31 +227,31 @@ class nrpe (
   }
 
   # Convert types
-  if type($server_address_enable) == 'string' {
+  if is_string($server_address_enable) {
     $server_address_enable_bool = str2bool($server_address_enable)
   } else {
     $server_address_enable_bool = $server_address_enable
   }
 
-  if type($command_prefix_enable) == 'string' {
+  if is_string($command_prefix_enable) {
     $command_prefix_enable_bool = str2bool($command_prefix_enable)
   } else {
     $command_prefix_enable_bool = $command_prefix_enable
   }
 
-  if type($service_enable) == 'string' {
+  if is_string($service_enable) {
     $service_enable_bool = str2bool($service_enable)
   } else {
     $service_enable_bool = $service_enable
   }
 
-  if type($purge_plugins) == 'string' {
+  if is_string($purge_plugins) {
     $purge_plugins_bool = str2bool($purge_plugins)
   } else {
     $purge_plugins_bool = $purge_plugins
   }
 
-  if type($hiera_merge_plugins) == 'string' {
+  if is_string($hiera_merge_plugins) {
     $hiera_merge_plugins_bool = str2bool($hiera_merge_plugins)
   } else {
     $hiera_merge_plugins_bool = $hiera_merge_plugins
