@@ -263,8 +263,9 @@ class nrpe (
   validate_absolute_path($nrpe_config_real)
   validate_absolute_path($libexecdir_real)
   validate_absolute_path($pid_file_real)
-  validate_re($server_port, '^\d+$',
-    "nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <${server_port}>.")
+  if !is_integer($server_port) {
+    fail("nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <${server_port}>.")
+  }
   if $server_port < 0 or $server_port > 65535 {
     fail("nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <${server_port}>.")
   }
