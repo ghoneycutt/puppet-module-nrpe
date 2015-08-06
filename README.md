@@ -11,7 +11,8 @@ and their associated parameters.
 
 # Compatibility
 ---------------
-This module supports Puppet v3 with Ruby versions 1.8.7, 1.9.3, 2.0.0 and 2.1.0.
+This module supports Puppet v3 (with and without the future parser) with Ruby
+versions 1.8.7, 1.9.3, 2.0.0 and 2.1.0.
 
 It is tested on the following platforms.
 
