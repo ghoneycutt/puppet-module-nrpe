@@ -18,7 +18,7 @@ class nrpe (
   $libexecdir                       = 'USE_DEFAULTS',
   $log_facility                     = 'daemon',
   $pid_file                         = 'USE_DEFAULTS',
-  $server_port                      = '5666',
+  $server_port                      = 5666,
   $server_address_enable            = false,
   $server_address                   = '127.0.0.1',
   $nrpe_user                        = 'USE_DEFAULTS',
@@ -263,9 +263,13 @@ class nrpe (
   validate_absolute_path($nrpe_config_real)
   validate_absolute_path($libexecdir_real)
   validate_absolute_path($pid_file_real)
-  validate_re($server_port, '^\d+$',
-    "nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <${server_port}>.")
-  if $server_port < 0 or $server_port > 65535 {
+
+  if is_string($server_port) == true {
+    validate_re($server_port, '^\d+$',
+      "nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <${server_port}>.")
+  }
+
+  if $server_port + 0 < 0 or $server_port + 0 > 65535 {
     fail("nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <${server_port}>.")
   }
   validate_array($allowed_hosts)

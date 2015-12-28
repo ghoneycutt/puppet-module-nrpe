@@ -120,9 +120,9 @@ File in which the NRPE daemon should write it's process ID number.
 
 server_port
 -----------
-Port number for nrpe.
+Integer port number for nrpe between 0 and 65535, inclusive.
 
-- *Default*: '5666'
+- *Default*: 5666
 
 server_address_enable
 ---------------------
