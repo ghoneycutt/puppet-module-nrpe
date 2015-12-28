@@ -21,7 +21,7 @@ define nrpe::plugin (
     $plugin_ensure = 'absent'
   }
 
-  include nrpe
+  include ::nrpe
 
   if $plugin == 'USE_DEFAULTS' {
     $plugin_real = $name
