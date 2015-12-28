@@ -121,7 +121,7 @@ describe 'nrpe::plugin' do
     it 'should fail' do
       expect {
         should contain_class('nrpe::plugin')
-      }.to raise_error(Puppet::Error,/nrpe::plugin::check_root_partition::ensure must be 'present' or 'absent'. Detected value is <invalid>./)
+      }.to raise_error(Puppet::Error,/nrpe::plugin::check_root_partition::ensure must be 'present' or 'absent'\. Detected value is <invalid>\./)
     end
   end
 

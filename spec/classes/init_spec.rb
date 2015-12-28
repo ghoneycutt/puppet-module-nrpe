@@ -7,7 +7,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/^nrpe supports Debian, RedHat, Suse, Solaris and Ubuntu. Detected osfamily is <Unsupported>./)
+      }.to raise_error(Puppet::Error,/nrpe supports Debian, RedHat, Suse, Solaris and Ubuntu\. Detected osfamily is <Unsupported>\./)
     end
   end
 
@@ -168,7 +168,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/^nrpe supports lsbdistid's Debian and Ubuntu in the osfamily Debian. Detected lsbdistid is <NotDebianorUbuntu>./)
+      }.to raise_error(Puppet::Error,/nrpe supports lsbdistid's Debian and Ubuntu in the osfamily Debian\. Detected lsbdistid is <NotDebianorUbuntu>\./)
     end
   end
 
@@ -356,7 +356,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::nrpe_config_mode must be a four digit octal mode. Detected value is <666>./)
+      }.to raise_error(Puppet::Error,/nrpe::nrpe_config_mode must be a four digit octal mode\. Detected value is <666>\./)
     end
   end
 
@@ -478,12 +478,12 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <not_a_port>./)
+      }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive\. Detected value is <not_a_port>\./)
     end
   end
 
   context 'with server_port set to a valid digit, but invalid port number (above 65535)' do
-    let(:params) { { :server_port => '1000000' } }
+    let(:params) { { :server_port => 1000000 } }
     let(:facts) do
       { :osfamily          => 'RedHat',
         :lsbmajdistrelease => '6',
@@ -493,12 +493,12 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <1000000>./)
+      }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive\. Detected value is <1000000>\./)
     end
   end
 
   context 'with server_port set to a valid digit, but invalid port number (negative)' do
-    let(:params) { { :server_port => '-23' } }
+    let(:params) { { :server_port => -23 } }
     let(:facts) do
       { :osfamily          => 'RedHat',
         :lsbmajdistrelease => '6',
@@ -508,8 +508,19 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive. Detected value is <-23>./)
+      }.to raise_error(Puppet::Error,/nrpe::server_port must be a valid port number between 0 and 65535, inclusive\. Detected value is <-23>\./)
     end
+  end
+
+  context 'with server_port set to a valid port, but stringified' do
+    let(:params) { { :server_port => '1234' } }
+    let(:facts) do
+      { :osfamily          => 'RedHat',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it { should contain_file('nrpe_config').with_content(/^server_port=1234$/) }
   end
 
   context 'with server_address_enable set to true' do
@@ -577,7 +588,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::dont_blame_nrpe must be 0 or 1. Detected value is <2>./)
+      }.to raise_error(Puppet::Error,/nrpe::dont_blame_nrpe must be 0 or 1\. Detected value is <2>\./)
     end
   end
 
@@ -592,7 +603,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::allow_bash_command_substitution must be 0 or 1. Detected value is <2>./)
+      }.to raise_error(Puppet::Error,/nrpe::allow_bash_command_substitution must be 0 or 1\. Detected value is <2>\./)
     end
   end
 
@@ -648,7 +659,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::debug must be 0 or 1. Detected value is <2>./)
+      }.to raise_error(Puppet::Error,/nrpe::debug must be 0 or 1\. Detected value is <2>\./)
     end
   end
 
@@ -663,7 +674,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::command_timeout must be a postive integer. Detected value is <-1>./)
+      }.to raise_error(Puppet::Error,/nrpe::command_timeout must be a postive integer\. Detected value is <-1>\./)
     end
   end
 
@@ -678,7 +689,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::connection_timeout must be a postive integer. Detected value is <-1>./)
+      }.to raise_error(Puppet::Error,/nrpe::connection_timeout must be a postive integer\. Detected value is <-1>\./)
     end
   end
 
@@ -693,7 +704,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::allow_weak_random_seed must be 0 or 1. Detected value is <2>./)
+      }.to raise_error(Puppet::Error,/nrpe::allow_weak_random_seed must be 0 or 1\. Detected value is <2>\./)
     end
   end
 
@@ -723,7 +734,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe::service_ensure must be \'running\' or \'stopped\'. Detected value is <present>./)
+      }.to raise_error(Puppet::Error,/nrpe::service_ensure must be \'running\' or \'stopped\'\. Detected value is <present>\./)
     end
   end
 
@@ -1334,7 +1345,7 @@ describe 'nrpe' do
       it do
         expect {
           should contain_class('nrpe')
-        }.to raise_error(Puppet::Error,/nrpe::nrpe_package must be a string or an array./)
+        }.to raise_error(Puppet::Error,/nrpe::nrpe_package must be a string or an array\./)
       end
     end
   end
@@ -1366,7 +1377,7 @@ describe 'nrpe' do
       it do
         expect {
           should contain_class('nrpe')
-        }.to raise_error(Puppet::Error,/true is not a string./)
+        }.to raise_error(Puppet::Error,/true is not a string\./)
       end
     end
   end
@@ -1425,7 +1436,7 @@ describe 'nrpe' do
       it do
         expect {
           should contain_class('nrpe')
-        }.to raise_error(Puppet::Error,/nrpe::nagios_plugins_package must be a string or an array./)
+        }.to raise_error(Puppet::Error,/nrpe::nagios_plugins_package must be a string or an array\./)
       end
     end
   end
@@ -1457,7 +1468,7 @@ describe 'nrpe' do
       it do
         expect {
           should contain_class('nrpe')
-        }.to raise_error(Puppet::Error,/true is not a string./)
+        }.to raise_error(Puppet::Error,/true is not a string\./)
       end
     end
   end
