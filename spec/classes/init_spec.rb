@@ -1,5 +1,13 @@
 require 'spec_helper'
 describe 'nrpe' do
+  # setting the global facts for all test if not overwritten locally
+  let(:facts) do
+    {
+      :osfamily          => 'RedHat',
+      :lsbmajdistrelease => '6',
+      :architecture      => 'x86_64',
+    }
+  end
 
   context 'with default options on unsupported osfamily' do
     let(:facts) { { :osfamily => 'Unsupported' } }
@@ -12,11 +20,6 @@ describe 'nrpe' do
   end
 
   context 'with default options on EL 6' do
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it { should compile.with_all_deps }
 
@@ -332,11 +335,6 @@ describe 'nrpe' do
 
   context 'with nrpe_config set to a non absolute path' do
     let(:params) { { :nrpe_config => 'invalid/path' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -347,11 +345,6 @@ describe 'nrpe' do
 
   context 'with nrpe_config_mode set to an invalid value' do
     let(:params) { { :nrpe_config_mode => '666' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -439,11 +432,6 @@ describe 'nrpe' do
   end
   context 'with libexecdir set to a non absolute path' do
     let(:params) { { :libexecdir => 'invalid/path' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -454,11 +442,6 @@ describe 'nrpe' do
 
   context 'with pid_file set to a non absolute path' do
     let(:params) { { :pid_file => 'invalid/path' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -469,11 +452,6 @@ describe 'nrpe' do
 
   context 'with server_port set to an invalid setting (non-digit)' do
     let(:params) { { :server_port => 'not_a_port' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -484,11 +462,6 @@ describe 'nrpe' do
 
   context 'with server_port set to a valid digit, but invalid port number (above 65535)' do
     let(:params) { { :server_port => 1000000 } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -499,11 +472,6 @@ describe 'nrpe' do
 
   context 'with server_port set to a valid digit, but invalid port number (negative)' do
     let(:params) { { :server_port => -23 } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -514,22 +482,12 @@ describe 'nrpe' do
 
   context 'with server_port set to a valid port, but stringified' do
     let(:params) { { :server_port => '1234' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it { should contain_file('nrpe_config').with_content(/^server_port=1234$/) }
   end
 
   context 'with server_address_enable set to true' do
     let(:params) { { :server_address_enable => true  } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it { should compile.with_all_deps }
 
@@ -538,11 +496,6 @@ describe 'nrpe' do
 
   context 'with server_address_enable set to to stringified \'true\'' do
     let(:params) { { :server_address_enable => 'true' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it { should compile.with_all_deps }
 
@@ -551,11 +504,6 @@ describe 'nrpe' do
 
   context 'with multiple entries for allowed_hosts' do
     let(:params) { { :allowed_hosts => ['127.0.0.1', 'poller.example.com'] } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it { should compile.with_all_deps }
 
@@ -564,11 +512,6 @@ describe 'nrpe' do
 
   context 'with allowed_hosts set to an invalid type (non-array)' do
     let(:params) { { :allowed_hosts => 'not_an_array' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -579,11 +522,6 @@ describe 'nrpe' do
 
   context 'with dont_blame_nrpe set to invalid value' do
     let(:params) { { :dont_blame_nrpe => '2' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -594,11 +532,6 @@ describe 'nrpe' do
 
   context 'with allow_bash_command_substitution set to invalid value' do
     let(:params) { { :allow_bash_command_substitution => '2' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -609,11 +542,6 @@ describe 'nrpe' do
 
   context 'with command_prefix_enable set to true' do
     let(:params) { { :command_prefix_enable => true  } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it { should compile.with_all_deps }
 
@@ -622,11 +550,6 @@ describe 'nrpe' do
 
   context 'with command_prefix_enable set to to stringified \'true\'' do
     let(:params) { { :command_prefix_enable => 'true' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it { should compile.with_all_deps }
 
@@ -635,11 +558,6 @@ describe 'nrpe' do
 
   context 'with command_prefix set to a non absolute path' do
     let(:params) { { :command_prefix => 'invalid/path' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -650,11 +568,6 @@ describe 'nrpe' do
 
   context 'with debug set to invalid value' do
     let(:params) { { :debug => '2' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -665,11 +578,6 @@ describe 'nrpe' do
 
   context 'with command_timeout set to an invalid setting' do
     let(:params) { { :command_timeout => '-1' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -680,11 +588,6 @@ describe 'nrpe' do
 
   context 'with connection_timeout set to an invalid setting' do
     let(:params) { { :connection_timeout => '-1' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -695,11 +598,6 @@ describe 'nrpe' do
 
   context 'with allow_weak_random_seed set to invalid value' do
     let(:params) { { :allow_weak_random_seed => '2' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -710,11 +608,6 @@ describe 'nrpe' do
 
   context 'with include_dir set to invalid value' do
     let(:params) { { :include_dir => 'invalid/path' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -725,11 +618,6 @@ describe 'nrpe' do
 
   context 'with service_ensure set to invalid value' do
     let(:params) { { :service_ensure => 'present' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -740,11 +628,6 @@ describe 'nrpe' do
 
   context 'with service_enable set to invalid value' do
     let(:params) { { :service_enable => 'invalid' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -1209,11 +1092,6 @@ describe 'nrpe' do
 
   context 'with plugins specified as an invalid type (array)' do
     let(:params) { { :plugins => ['an','array'] } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it do
       expect {
@@ -1224,11 +1102,6 @@ describe 'nrpe' do
 
   context 'with purge_plugins specified as not close to a boolean' do
     let(:params) { { :purge_plugins => 'not even close to a boolean' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it do
       expect {
@@ -1241,11 +1114,6 @@ describe 'nrpe' do
   ['true',true,'false',false].each do |value|
     context "with purge_plugins specified as #{value}" do
       let(:params) { { :purge_plugins => value } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it {
         should contain_file('nrpe_config_dot_d').with({
@@ -1265,11 +1133,6 @@ describe 'nrpe' do
 
   context 'with hiera_merge_plugins specified as not close to a boolean' do
     let(:params) { { :hiera_merge_plugins => 'not even close to a boolean' } }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it do
       expect {
@@ -1281,11 +1144,6 @@ describe 'nrpe' do
   ['true',true,'false',false].each do |value|
     context "with hiera_merge_plugins specified as #{value}" do
       let(:params) { { :hiera_merge_plugins => value } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it { should compile.with_all_deps }
     end
@@ -1294,11 +1152,6 @@ describe 'nrpe' do
   describe 'with nrpe_package parameter' do
     context 'set to a string' do
       let(:params) { { :nrpe_package => 'mynrpe' } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it {
         should contain_package('mynrpe').with({
@@ -1311,11 +1164,6 @@ describe 'nrpe' do
 
     context 'set to an array' do
       let(:params) { { :nrpe_package => ['mynrpe','nrpe_dep'] } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it {
         should contain_package('mynrpe').with({
@@ -1336,11 +1184,6 @@ describe 'nrpe' do
 
     context 'set to an invalid type (boolean)' do
       let(:params) { { :nrpe_package => true } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it do
         expect {
@@ -1353,11 +1196,6 @@ describe 'nrpe' do
   describe 'with nrpe_package_ensure parameter' do
     context 'set to a string' do
       let(:params) { { :nrpe_package_ensure => 'latest' } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it {
         should contain_package('nrpe').with({
@@ -1368,11 +1206,6 @@ describe 'nrpe' do
 
     context 'set to an invalid type (boolean)' do
       let(:params) { { :nrpe_package_ensure => true } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it do
         expect {
@@ -1385,11 +1218,6 @@ describe 'nrpe' do
   describe 'with nagios_plugins_package parameter' do
     context 'set to a string' do
       let(:params) { { :nagios_plugins_package => 'nagios-plugins' } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it {
         should contain_package('nagios-plugins').with({
@@ -1402,11 +1230,6 @@ describe 'nrpe' do
 
     context 'set to an array' do
       let(:params) { { :nagios_plugins_package => ['nagios-plugins','nagios-plugins-dep'] } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it {
         should contain_package('nagios-plugins').with({
@@ -1427,11 +1250,6 @@ describe 'nrpe' do
 
     context 'set to an invalid type (boolean)' do
       let(:params) { { :nagios_plugins_package => true } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it do
         expect {
@@ -1444,11 +1262,6 @@ describe 'nrpe' do
   describe 'with nagios_plugins_package_ensure parameter' do
     context 'set to a string' do
       let(:params) { { :nagios_plugins_package_ensure => 'latest' } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it {
         should contain_package('nagios-plugins').with({
@@ -1459,11 +1272,6 @@ describe 'nrpe' do
 
     context 'set to an invalid type (boolean)' do
       let(:params) { { :nagios_plugins_package_ensure => true } }
-      let(:facts) do
-        { :osfamily          => 'RedHat',
-          :lsbmajdistrelease => '6',
-        }
-      end
 
       it do
         expect {

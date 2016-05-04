@@ -1,17 +1,20 @@
 require 'spec_helper'
 
 describe 'nrpe::plugin' do
+  # setting the global facts for all test if not overwritten locally
+  let(:facts) do
+    {
+      :osfamily          => 'RedHat',
+      :lsbmajdistrelease => '6',
+      :architecture      => 'x86_64',
+    }
+  end
   context 'should create plugin file with all options specified' do
     let(:title) { 'check_root_partition' }
     let(:params) do
       { :plugin     => 'check_disk',
         :libexecdir => '/usr/lib64/nagios/plugins',
         :args       => '-w 20% -c 10% -p /',
-      }
-    end
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
       }
     end
 
@@ -46,11 +49,6 @@ describe 'nrpe::plugin' do
         :args       => '-w 20% -c 10% -p /',
       }
     end
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it { should compile.with_all_deps }
 
@@ -71,11 +69,6 @@ describe 'nrpe::plugin' do
 
   context 'should create plugin file with no args param specified' do
     let(:title) { 'check_load' }
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it { should compile.with_all_deps }
 
@@ -112,11 +105,6 @@ describe 'nrpe::plugin' do
         :args   => '-w 20% -c 10% -p /',
       }
     end
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
-      }
-    end
 
     it 'should fail' do
       expect {
@@ -131,11 +119,6 @@ describe 'nrpe::plugin' do
       { :plugin     => 'check_disk',
         :libexecdir => 'invalid/path',
         :args       => '-w 20% -c 10% -p /',
-      }
-    end
-    let(:facts) do
-      { :osfamily          => 'RedHat',
-        :lsbmajdistrelease => '6',
       }
     end
 
