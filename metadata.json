@@ -1,6 +1,6 @@
 {
   "name": "ghoneycutt-nrpe",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "author": "ghoneycutt",
   "summary": "Manage NRPE",
   "license": "Apache-2.0",
@@ -51,7 +51,8 @@
     {
       "operatingsystem": "Solaris",
       "operatingsystemrelease": [
-        "10"
+        "10",
+        "11"
       ]
     },
     {
