@@ -356,7 +356,6 @@ describe 'nrpe' do
   context 'with default options on Solaris' do
     let(:facts) do
       { :osfamily          => 'Solaris',
-        :kernelrelase      => '5.10',
       }
     end
 
@@ -430,6 +429,7 @@ describe 'nrpe' do
       })
     }
   end
+
   context 'with libexecdir set to a non absolute path' do
     let(:params) { { :libexecdir => 'invalid/path' } }
 
@@ -1279,5 +1279,42 @@ describe 'nrpe' do
         }.to raise_error(Puppet::Error,/true is not a string\./)
       end
     end
+
+    describe 'with nrpe_package_provider parameter' do
+      context 'set to a valid string' do
+        let :params do
+          { 
+            :nrpe_package_provider  => 'sun',
+          }
+        end
+ 
+        it {
+          should contain_package('nrpe').with({
+            'provider' => 'sun',
+          })
+        }
+
+        it {
+          should contain_package('nagios-plugins').with({
+            'provider' => 'sun',
+          })
+        }
+      end
+
+      context 'set to an invalid type (non-string)' do
+        let :params do
+          { :nrpe_package           => 'nrpe',
+            :nrpe_package_provider  => true,
+          }
+        end
+
+        it 'should fail' do
+          expect {
+            should contain_class('nrpe')
+          }.to raise_error(Puppet::Error,/true is not a string.  It looks to be a TrueClass/)
+        end
+      end
+    end
+
   end
 end

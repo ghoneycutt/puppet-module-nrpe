@@ -20,6 +20,7 @@ It is tested on the following platforms.
 * EL 6
 * Suse 11
 * Solaris 10
+* Solaris 11
 * Ubuntu 12
 
 ===
@@ -51,6 +52,12 @@ nrpe_package_source
 Source to NRPE package.
 
 - *Default*: based on OS platform. (used on Solaris)
+
+nrpe_package_provider
+-------------------
+Name of the package provider for the NRPE package.
+
+- *Default*: undef.
 
 nagios_plugins_package
 ----------------------
