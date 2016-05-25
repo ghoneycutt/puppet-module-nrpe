@@ -241,9 +241,21 @@ This will default to 'true' in future versions.
 
 - *Default*: false
 
+hiera_merge_rawconfig
+-------------------
+Boolean to control merges of all found instances of nrpe::rawconfig in Hiera. This is useful for specifying file resources at different levels of the hierarchy and having them all included in the catalog.
+
+- *Default*: false
+
 plugins
 -------
 Hash of plugins to be passed to nrpe::plugin with create_resources().
+
+- *Default*: undef
+
+rawconfig
+-------
+Hash of config files with raw content to be passed to nrpe::rawcfg with create_resources().
 
 - *Default*: undef
 
@@ -303,3 +315,38 @@ plugin
 Name of the plugin to be executed.
 
 - *Default*: $name
+
+===
+
+# Define `nrpe::rawcfg`
+
+Creates a fragment in the nrpe.d directory with `$name.cfg`. Each contain raw data supplied with the `$content` parameter.
+
+## Usage
+You can optionally specify a hash of nrpe rawconfig in Hiera.
+
+<pre>
+---
+nrpe::rawconfig:
+  baseline_tests:
+    content: |
+      command[check_users]=/opt/plugins/check_users -w 9999 -c 9999
+      command[check_swap]=/opt/plugins/check_swap -w 10%
+  check_disk:
+    content: |
+      command[check_disk_usr]=/opt/plugins/check_disk -w 5% -c 2% -p /usr -m
+</pre>
+
+## Parameters
+
+ensure
+------
+Ensure the plugin exists. Valid values are `present` and `absent`.
+
+- *Default*: present
+
+content
+----
+Raw content to be written to the configuration file.
+
+- *Defaul*: undef

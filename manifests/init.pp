@@ -37,8 +37,10 @@ class nrpe (
   $service_name                     = 'USE_DEFAULTS',
   $service_enable                   = true,
   $plugins                          = undef,
+  $rawconfig                        = undef,
   $purge_plugins                    = false,
   $hiera_merge_plugins              = false,
+  $hiera_merge_rawconfig            = false,
   $nrpe_package_provider            = undef,
 ) {
 
@@ -258,6 +260,12 @@ class nrpe (
     $hiera_merge_plugins_bool = $hiera_merge_plugins
   }
 
+  if is_string($hiera_merge_rawconfig) {
+    $hiera_merge_rawconfig_bool = str2bool($hiera_merge_rawconfig)
+  } else {
+    $hiera_merge_rawconfig_bool = $hiera_merge_rawconfig
+  }
+
   # Validate params
   validate_re($nrpe_config_mode, '^\d{4}$',
     "nrpe::nrpe_config_mode must be a four digit octal mode. Detected value is <${nrpe_config_mode}>.")
@@ -348,5 +356,19 @@ class nrpe (
     }
     validate_hash($plugins_real)
     create_resources('nrpe::plugin',$plugins_real)
+  }
+
+  if $rawconfig != undef {
+    if $hiera_merge_rawconfig_bool {
+      $rawconfig_real = hiera_hash(nrpe::rawconfig)
+    } else {
+      $rawconfig_real = $rawconfig
+    }
+    validate_hash($rawconfig_real)
+    create_resources('nrpe::rawcfg',$rawconfig_real)
+  }
+
+  if $plugins != undef and $rawconfig != undef {
+    create_resources(collisioncheck, $rawconfig)
   }
 }
