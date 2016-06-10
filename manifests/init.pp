@@ -263,7 +263,9 @@ class nrpe (
     "nrpe::nrpe_config_mode must be a four digit octal mode. Detected value is <${nrpe_config_mode}>.")
   validate_absolute_path($nrpe_config_real)
   validate_absolute_path($libexecdir_real)
-  validate_absolute_path($pid_file_real)
+  if $pid_file_real != 'absent' {
+    validate_absolute_path($pid_file_real)
+  }
 
   if is_string($server_port) == true {
     validate_re($server_port, '^\d+$',

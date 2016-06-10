@@ -440,16 +440,6 @@ describe 'nrpe' do
     end
   end
 
-  context 'with pid_file set to a non absolute path' do
-    let(:params) { { :pid_file => 'invalid/path' } }
-
-    it 'should fail' do
-      expect {
-        should contain_class('nrpe')
-      }.to raise_error(Puppet::Error)
-    end
-  end
-
   context 'with server_port set to an invalid setting (non-digit)' do
     let(:params) { { :server_port => 'not_a_port' } }
 
@@ -1313,6 +1303,27 @@ describe 'nrpe' do
             should contain_class('nrpe')
           }.to raise_error(Puppet::Error,/true is not a string.  It looks to be a TrueClass/)
         end
+      end
+    end
+
+  end
+
+  describe 'with pid_file parameter' do
+    context 'with pid_file set to absent' do
+      let(:params) { { :pid_file => 'absent' } }
+
+      it {
+        should contain_file('nrpe_config').without_content(/^\s*pid_file/)
+      }
+    end
+
+    context 'with pid_file set to a non absolute path' do
+      let(:params) { { :pid_file => 'invalid/path' } }
+
+      it 'should fail' do
+        expect {
+          should contain_class('nrpe')
+        }.to raise_error(Puppet::Error,/"invalid\/path" is not an absolute path\./)
       end
     end
 

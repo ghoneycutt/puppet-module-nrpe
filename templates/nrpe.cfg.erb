@@ -21,7 +21,9 @@ log_facility=<%= @log_facility %>
 # The name of the file in which the NRPE daemon should write it's process ID
 # number.  The file is only written if the NRPE daemon is started by the root
 # user and is running in standalone mode.
+<% if @pid_file_real != 'absent' -%>
 pid_file=<%= @pid_file_real %>
+<% end -%>
 
 # PORT NUMBER
 # Port number we should wait for connections on.

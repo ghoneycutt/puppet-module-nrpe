@@ -121,7 +121,7 @@ The syslog facility that should be used for logging purposes.
 
 pid_file
 --------
-File in which the NRPE daemon should write it's process ID number.
+File in which the NRPE daemon should write it's process ID number. To disable the use of the pid_file parameter, specify the value as 'absent'.
 
 - *Default*: based on OS platform.
 
