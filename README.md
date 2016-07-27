@@ -253,6 +253,18 @@ Boolean to purge the nrpe.d directory of entries not managed by Puppet.
 
 - *Default*: false
 
+plugins_consolidate
+-------------------
+Boolean to consolidate all plugins into one file under nrpe.d instead of one file for each plugin.
+
+- *Default*: false
+
+plugins_consolidate_filename
+----------------------------
+Filename to use when plugins_consolidate is set to true. Should be specified without file extension.
+
+- *Default*: 'plugins'
+
 ===
 
 # Define `nrpe::plugin`
