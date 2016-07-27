@@ -1,0 +1,9 @@
+# This file is being maintained by Puppet.
+# DO NOT EDIT
+#
+<%if defined?(@plugins_real) -%><% @plugins_real.each do |key,value| -%>
+<% unless value['ensure'] == 'absent' -%>
+command[<%= key %>]=<% if value['libexecdir'] -%><%= value['libexecdir'] %><% else -%><%= @libexecdir_real %><% end -%>/<% if value['plugin'] -%><%= value['plugin'] %><% else -%><%= key %><% end -%><% if value['args'] -%> <%= value['args'] %><% end -%><% end -%>
+
+<% end -%>
+<% end -%>

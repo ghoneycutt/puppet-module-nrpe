@@ -37,6 +37,8 @@ class nrpe (
   $service_name                     = 'USE_DEFAULTS',
   $service_enable                   = true,
   $plugins                          = undef,
+  $plugins_consolidate              = false,
+  $plugins_consolidate_filename     = 'plugins',
   $purge_plugins                    = false,
   $hiera_merge_plugins              = false,
   $nrpe_package_provider            = undef,
@@ -258,6 +260,13 @@ class nrpe (
     $hiera_merge_plugins_bool = $hiera_merge_plugins
   }
 
+  if is_string($plugins_consolidate) {
+    $plugins_consolidate_bool = str2bool($plugins_consolidate)
+  } else {
+    $plugins_consolidate_bool = $plugins_consolidate
+  }
+
+
   # Validate params
   validate_re($nrpe_config_mode, '^\d{4}$',
     "nrpe::nrpe_config_mode must be a four digit octal mode. Detected value is <${nrpe_config_mode}>.")
@@ -349,6 +358,20 @@ class nrpe (
       $plugins_real = $plugins
     }
     validate_hash($plugins_real)
-    create_resources('nrpe::plugin',$plugins_real)
+
+    if $plugins_consolidate_bool and $plugins_consolidate_filename != undef {
+      file { $plugins_consolidate_filename:
+        ensure  => file,
+        path    => "${include_dir_real}/${plugins_consolidate_filename}.cfg",
+        content => template('nrpe/consolidated.erb'),
+        owner   => $nrpe_config_owner,
+        group   => $nrpe_config_group,
+        mode    => $nrpe_config_mode,
+        require => File['nrpe_config_dot_d'],
+        notify  => Service['nrpe_service'],
+      }
+    } else {
+      create_resources('nrpe::plugin',$plugins_real)
+    }
   }
 }
