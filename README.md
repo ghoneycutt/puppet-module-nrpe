@@ -290,13 +290,21 @@ args
 ----
 Arguments to pass to the plugin.
 
-- *Defaul*: undef
+- *Default*: undef
 
 libexecdir
 ----------
 Directory in which nrpe plugin is stored.
 
 - *Default*: $nrpe::libexecdir, which is based on OS platform.
+
+command_prefix
+--------------
+Prefix an individual plugin command with a user-defined string. Must be a fully qualified path. Set to `USE_DEFAULTS` to use the value from `$nrpe::command_prefix` (defaults to `/usr/bin/sudo`).
+
+Please be careful when enabling `$nrpe::command_prefix_enable` and also setting `nrpe::plugin::command_prefix`.
+
+- *Default*: undef
 
 plugin
 ------
