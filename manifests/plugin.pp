@@ -6,10 +6,11 @@
 # command[check_hda1]=@libexecdir@/check_disk -w 20% -c 10% -p /dev/hda1
 # command[$name]=$libexecdir/$plugin $args
 define nrpe::plugin (
-  $ensure     = 'present',
-  $args       = 'UNSET',
-  $libexecdir = 'USE_DEFAULTS',
-  $plugin     = 'USE_DEFAULTS',
+  $ensure         = 'present',
+  $args           = 'UNSET',
+  $libexecdir     = 'USE_DEFAULTS',
+  $plugin         = 'USE_DEFAULTS',
+  $command_prefix = 'UNSET',
 ) {
 
   validate_re($ensure,'^(present)|(absent)$',
@@ -33,6 +34,15 @@ define nrpe::plugin (
     $libexecdir_real = $nrpe::libexecdir_real
   } else {
     $libexecdir_real = $libexecdir
+  }
+
+  if $command_prefix == 'USE_DEFAULTS' {
+    $command_prefix_real = $nrpe::command_prefix
+  } elsif $command_prefix == 'UNSET' {
+    $command_prefix_real = $command_prefix
+  } else {
+    $command_prefix_real = $command_prefix
+    validate_absolute_path($command_prefix_real)
   }
 
   validate_absolute_path($libexecdir_real)

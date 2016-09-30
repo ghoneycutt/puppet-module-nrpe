@@ -128,4 +128,53 @@ describe 'nrpe::plugin' do
       }.to raise_error(Puppet::Error)
     end
   end
+
+  context 'should create plugin file with no command_prefix param specified' do
+    let(:title) { 'check_disk' }
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_plugin_check_disk') \
+        .with_content(/^command\[check_disk\]=\/usr\/lib64\/nagios\/plugins\/check_disk$/)
+    }
+
+    it {
+      should_not contain_file('nrpe_plugin_check_disk') \
+        .with_content(/^command\[check_disk\]=UNSET\/usr\/lib64\/nagios\/plugins\/check_disk$/)
+    }
+  end
+
+  context 'should create plugin file with command_prefix set to USE_DEFAULTS' do
+    let(:title) { 'check_disk' }
+    let(:params) { { :command_prefix => 'USE_DEFAULTS' } }
+
+    it {
+      should contain_file('nrpe_plugin_check_disk') \
+        .with_content(/^command\[check_disk\]=\/usr\/bin\/sudo \/usr\/lib64\/nagios\/plugins\/check_disk$/)
+    }
+  end
+
+  context 'should create plugin file command_prefix set to /path/to/prefix' do
+    let(:title) { 'check_disk' }
+    let(:params) { { :command_prefix => '/path/to/prefix' } }
+
+    it {
+      should contain_file('nrpe_plugin_check_disk') \
+        .with_content(/^command\[check_disk\]=\/path\/to\/prefix \/usr\/lib64\/nagios\/plugins\/check_disk$/)
+    }
+  end
+
+  context 'with command_prefix set to a non absolute path' do
+    let(:title) { 'check_disk' }
+    let(:params) { { :command_prefix => 'invalid/path' } }
+
+    it 'should fail' do
+      expect {
+        should contain_class('nrpe::plugin')
+      }.to raise_error(Puppet::Error)
+    end
+  end
 end
