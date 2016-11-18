@@ -3,19 +3,16 @@
   "version": "1.5.0",
   "author": "ghoneycutt",
   "summary": "Manage NRPE",
+  "description": "Manage NRPE - Nagios Remote Plugin Executor",
   "license": "Apache-2.0",
   "source": "git://github.com/ghoneycutt/puppet-module-nrpe.git",
   "project_page": "https://github.com/ghoneycutt/puppet-module-nrpe",
   "issues_url": "https://github.com/ghoneycutt/puppet-module-nrpe/issues",
   "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": ">= 3.0.0 < 5.0.0"
-    },
-    {
-      "name": "puppet",
-      "version_requirement": ">= 3.0.0 < 5.0.0"
-    }
+    {"name":"puppet","version_requirement":">= 3.0.0 < 5.0.0"}
+  ],
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.6.0 < 5.0.0"}
   ],
   "operatingsystem_support": [
     {
@@ -67,9 +64,5 @@
         "12.04"
       ]
     }
-  ],
-  "description": "Manage NRPE - Nagios Remote Plugin Executor",
-  "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0 < 5.0.0"}
   ]
 }
