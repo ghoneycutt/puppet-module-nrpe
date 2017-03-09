@@ -26,6 +26,7 @@ class nrpe (
   $allowed_hosts                    = ['127.0.0.1'],
   $dont_blame_nrpe                  = '0',
   $allow_bash_command_substitution  = '0',
+  $check_command_prefix             = undef,
   $command_prefix_enable            = false,
   $command_prefix                   = '/usr/bin/sudo',
   $debug                            = '0',

@@ -1,4 +1,4 @@
 # This file is being maintained by Puppet.
 # DO NOT EDIT
 #
-command[<%= @name %>]=<% if @command_prefix_real != 'UNSET' %><%= @command_prefix_real %> <% end %><%= @libexecdir_real %>/<%= @plugin_real %><% if @args != 'UNSET' %> <%= @args %><% end %>
+command[<%= @name %>]=<% unless @check_command_prefix.nil? %><%= @check_command_prefix %> <% end %><%= @libexecdir_real %>/<%= @plugin_real %><% if @args != 'UNSET' %> <%= @args %><% end %>
