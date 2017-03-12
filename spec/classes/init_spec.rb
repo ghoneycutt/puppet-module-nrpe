@@ -1080,8 +1080,362 @@ describe 'nrpe' do
     }
   end
 
+  context 'with rawconfig specified as a hash on 32 bit EL 6' do
+    let(:params) {
+      {
+        :rawconfig => {
+          'raw_baseline' => {
+            'content'     => 'rawcontent',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :architecture      => 'i386',
+        :osfamily          => 'RedHat',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nrpe.d/raw_baseline.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline') \
+        .with_content(/^rawcontent$/)
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+  end
+
+  context 'with rawconfig specified as a hash on 64 bit EL 6' do
+    let(:params) {
+      {
+        :rawconfig => {
+          'raw_baseline' => {
+            'content'     => 'rawcontent',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :architecture      => 'x86_64',
+        :osfamily          => 'RedHat',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nrpe.d/raw_baseline.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline') \
+        .with_content(/^rawcontent$/)
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+  end
+
+  context 'with rawconfig specified as a hash on Suse 11' do
+    let(:params) {
+      {
+        :rawconfig => {
+          'raw_baseline' => {
+            'content'     => 'rawcontent',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :osfamily          => 'Suse',
+        :lsbmajdistrelease => '11',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nrpe.d/raw_baseline.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline') \
+        .with_content(/^rawcontent$/)
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+  end
+  
+  context 'with rawconfig specified as a hash on Debian 6' do
+    let(:params) {
+      {
+        :rawconfig => {
+          'raw_baseline' => {
+            'content'     => 'rawcontent',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :osfamily          => 'Debian',
+        :lsbdistid         => 'Debian',
+        :lsbmajdistrelease => '6',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nagios/nrpe.d/raw_baseline.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline') \
+        .with_content(/^rawcontent$/)
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nagios/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+  end
+
+  context 'with rawconfig specified as a hash on Ubuntu 12' do
+    let(:params) {
+      {
+        :rawconfig => {
+          'raw_baseline' => {
+            'content'     => 'rawcontent',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :osfamily          => 'Debian',
+        :lsbdistid         => 'Ubuntu',
+        :lsbmajdistrelease => '12',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nagios/nrpe.d/raw_baseline.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline') \
+        .with_content(/^rawcontent$/)
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/etc/nagios/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+  end
+
+  context 'with rawconfig specified as a hash on Solaris 10' do
+    let(:params) {
+      {
+        :rawconfig => {
+          'raw_baseline' => {
+            'content'     => 'rawcontent',
+          },
+          'check_me_out' => {
+            'ensure' => 'absent',
+          },
+        }
+      }
+    }
+    let(:facts) do
+      { :osfamily      => 'Solaris',
+        :kernelrelease => '5.10',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline').with({
+        'ensure'  => 'file',
+        'path'    => '/usr/local/nagios/etc/nrpe.d/raw_baseline.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_raw_baseline') \
+        .with_content(/^rawcontent$/)
+    }
+
+    it {
+      should contain_file('nrpe_rawcfg_check_me_out').with({
+        'ensure'  => 'absent',
+        'path'    => '/usr/local/nagios/etc/nrpe.d/check_me_out.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[nrpe_config_dot_d]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+  end
+
+  context 'rawconfig and plugins using colliding names' do
+    let(:params) {
+      {
+        :rawconfig => {
+          'colliding_name' => {
+            'content'     => 'rawcontent',
+          },
+        },
+        :plugins => {
+          'colliding_name' => {
+            'args'       => '-w 10,8,8 -c 12,10,9',
+          },
+        }
+      }
+    }
+    it do
+      expect {
+        should contain_class('nrpe')
+      }.to raise_error(Puppet::Error)
+    end
+  end
+
   context 'with plugins specified as an invalid type (array)' do
     let(:params) { { :plugins => ['an','array'] } }
+
+    it do
+      expect {
+        should contain_class('nrpe')
+      }.to raise_error(Puppet::Error)
+    end
+  end
+
+  context 'with rawconfig specified as an invalid type (array)' do
+    let(:params) { { :rawconfig => ['an','array'] } }
 
     it do
       expect {
@@ -1134,6 +1488,24 @@ describe 'nrpe' do
   ['true',true,'false',false].each do |value|
     context "with hiera_merge_plugins specified as #{value}" do
       let(:params) { { :hiera_merge_plugins => value } }
+
+      it { should compile.with_all_deps }
+    end
+  end
+
+  context 'with hiera_merge_rawconfig specified as not close to a boolean' do
+    let(:params) { { :hiera_merge_rawconfig => 'not even close to a boolean' } }
+
+    it do
+      expect {
+        should contain_class('nrpe')
+      }.to raise_error(Puppet::Error)
+    end
+  end
+
+  ['true',true,'false',false].each do |value|
+    context "with hiera_merge_rawconfig specified as #{value}" do
+      let(:params) { { :hiera_merge_rawconfig => value } }
 
       it { should compile.with_all_deps }
     end
