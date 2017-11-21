@@ -163,7 +163,7 @@ describe 'nrpe' do
   context 'with default options on osfamily Debian with unsupported lsbdistid' do
     let(:facts) do
       { :osfamily          => 'Debian',
-        :lsbdistid         => 'NotDebianorUbuntu',
+        :lsbdistid         => 'NotSupported',
         :lsbmajdistrelease => '6',
       }
     end
@@ -171,7 +171,7 @@ describe 'nrpe' do
     it 'should fail' do
       expect {
         should contain_class('nrpe')
-      }.to raise_error(Puppet::Error,/nrpe supports lsbdistid's Debian and Ubuntu in the osfamily Debian\. Detected lsbdistid is <NotDebianorUbuntu>\./)
+      }.to raise_error(Puppet::Error,/nrpe supports lsbdistid's Debian, Raspbian and Ubuntu in the osfamily Debian\. Detected lsbdistid is <NotSupported>\./)
     end
   end
 
@@ -180,6 +180,85 @@ describe 'nrpe' do
       { :osfamily          => 'Debian',
         :lsbdistid         => 'Debian',
         :lsbmajdistrelease => '6',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should contain_class('nrpe') }
+
+    it {
+      should contain_package('nagios-nrpe-server').with({
+        'ensure'    => 'present',
+        'adminfile' => nil,
+        'source'    => nil,
+      })
+    }
+
+    it {
+      should contain_package('nagios-plugins-basic').with({
+        'ensure'    => 'present',
+        'adminfile' => nil,
+        'source'    => nil,
+        'before'    => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_file('nrpe_config').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/nagios/nrpe.cfg',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'Package[nagios-nrpe-server]',
+      })
+    }
+
+    it { should contain_file('nrpe_config').with_content(/^log_facility=daemon$/) }
+    it { should contain_file('nrpe_config').with_content(/^pid_file=\/var\/run\/nagios\/nrpe.pid$/) }
+    it { should contain_file('nrpe_config').with_content(/^server_port=5666$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^server_address=127.0.0.1$/) }
+    it { should contain_file('nrpe_config').with_content(/^nrpe_user=nagios$/) }
+    it { should contain_file('nrpe_config').with_content(/^nrpe_group=nagios$/) }
+    it { should contain_file('nrpe_config').with_content(/^allowed_hosts=127.0.0.1$/) }
+    it { should contain_file('nrpe_config').with_content(/^dont_blame_nrpe=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^allow_bash_command_substitution=0$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^command_prefix=\/usr\/bin\/sudo$/) }
+    it { should contain_file('nrpe_config').with_content(/^debug=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^command_timeout=60$/) }
+    it { should contain_file('nrpe_config').with_content(/^connection_timeout=300$/) }
+    it { should contain_file('nrpe_config').with_content(/^allow_weak_random_seed=0$/) }
+    it { should contain_file('nrpe_config').with_content(/^include_dir=\/etc\/nagios\/nrpe.d$/) }
+    it { should_not contain_file('nrpe_config').with_content(/^command\[$/) }
+
+    it {
+      should contain_file('nrpe_config_dot_d').with({
+        'ensure'  => 'directory',
+        'path'    => '/etc/nagios/nrpe.d',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'Package[nagios-nrpe-server]',
+        'notify'  => 'Service[nrpe_service]',
+      })
+    }
+
+    it {
+      should contain_service('nrpe_service').with({
+        'ensure'    => 'running',
+        'name'      => 'nagios-nrpe-server',
+        'enable'    => true,
+        'subscribe' => 'File[nrpe_config]',
+      })
+    }
+  end
+
+  context 'with default options on Debian 8' do
+    let(:facts) do
+      { :osfamily          => 'Debian',
+        :lsbdistid         => 'Debian',
+        :lsbmajdistrelease => '8',
       }
     end
 

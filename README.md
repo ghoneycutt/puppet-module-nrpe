@@ -18,6 +18,7 @@ and v5 with Ruby versions 1.8.7, 1.9.3, 2.0.0, 2.1.9 and 2.4.1. See
 It is tested on the following platforms.
 
 * Debian 6
+* Debian 8
 * EL 6
 * Suse 11
 * Solaris 10
