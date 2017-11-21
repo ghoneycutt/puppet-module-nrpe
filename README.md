@@ -11,9 +11,9 @@ and their associated parameters.
 
 # Compatibility
 ---------------
-This module supports Puppet v3 (with and without the future parser) and
-v4 with Ruby versions 1.8.7, 1.9.3, 2.0.0, 2.1.9. See `.travis.yml` for
-an exact matrix.
+This module supports Puppet v3 (with and without the future parser), v4
+and v5 with Ruby versions 1.8.7, 1.9.3, 2.0.0, 2.1.9 and 2.4.1. See
+`.travis.yml` for an exact matrix.
 
 It is tested on the following platforms.
 
