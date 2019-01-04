@@ -96,7 +96,7 @@ class nrpe (
     }
     'Debian': {
       case $::lsbdistid {
-        'Debian': {
+        'Debian', 'Raspbian': {
           $default_service_name                     = 'nagios-nrpe-server'
           $default_nrpe_package                     = 'nagios-nrpe-server'
           $default_nrpe_package_adminfile           = undef
@@ -127,7 +127,7 @@ class nrpe (
           $default_include_dir                      = '/etc/nagios/nrpe.d'
         }
         default: {
-          fail("nrpe supports lsbdistid's Debian and Ubuntu in the osfamily Debian. Detected lsbdistid is <${::lsbdistid}>.")
+          fail("nrpe supports lsbdistid's Debian, Raspbian and Ubuntu in the osfamily Debian. Detected lsbdistid is <${::lsbdistid}>.")
         }
       }
     }

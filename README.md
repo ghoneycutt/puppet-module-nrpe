@@ -18,6 +18,7 @@ See `.travis.yml` for an exact matrix.
 It is tested on the following platforms.
 
 * Debian 6
+* Debian 8
 * EL 6
 * Suse 11
 * Solaris 10
