@@ -116,7 +116,10 @@ class nrpe (
           $default_nrpe_package                     = 'nagios-nrpe-server'
           $default_nrpe_package_adminfile           = undef
           $default_nrpe_package_source              = undef
-          $default_nagios_plugins_package           = 'nagios-plugins-basic'
+          $default_nagios_plugins_package           = (versioncmp($facts[os][release][full], '20.04') < 0) ? {
+            true    => 'nagios-plugins-basic',
+            default => 'monitoring-plugins-basic',
+          }
           $default_nagios_plugins_package_adminfile = undef
           $default_nagios_plugins_package_source    = undef
           $default_nrpe_config                      = '/etc/nagios/nrpe.cfg'
