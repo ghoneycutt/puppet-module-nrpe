@@ -24,6 +24,10 @@ It is tested on the following platforms.
 * Solaris 10
 * Solaris 11
 * Ubuntu 12
+* Ubuntu 14.04
+* Ubuntu 16.04
+* Ubuntu 18.04
+* Ubuntu 20.04
 
 ===
 
